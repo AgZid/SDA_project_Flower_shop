@@ -1,34 +1,38 @@
 package com.repository;
 
 import com.util.HibernateUtil;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
 
 public class Repository {
+
+    private static final Logger LOGGER = Logger.getLogger(Repository.class);
     private static Session session = HibernateUtil.getSessionFactory().openSession();
 
     public <T> List<T> findAll(String SQLQuery, Class<T> queryClass) {
-        System.out.println("Select all:");
+        LOGGER.info("Find all from " + queryClass);
         return session.createQuery(SQLQuery, queryClass).getResultList();
     }
 
     public <T> T findById(String SQLQuery, Class<T> queryClass, Integer id) {
-        System.out.println("Find by id");
+        LOGGER.info("Find by id from " + queryClass + " where id = " + id);
         return session.createQuery(SQLQuery, queryClass)
                 .setParameter("id", id)
                 .getSingleResult();
     }
 
     public <T> T findByName(String SQLQuery, Class<T> queryClass, String name) {
-        System.out.println("Find by name");
+        LOGGER.info("Find by name from " + queryClass + " where name = " + name);
         return session.createQuery(SQLQuery, queryClass)
                 .setParameter("name", name)
                 .getSingleResult();
     }
 
     public <T> void createOrUpdateRecord(T recordToAdd) {
+        LOGGER.info("Create or update " + recordToAdd );
         if (recordToAdd != null) {
             Transaction transaction = session.beginTransaction();
             session.saveOrUpdate(recordToAdd);
@@ -40,6 +44,7 @@ public class Repository {
     }
 
     public <T> void removeRecord(T recordToRemove) {
+        LOGGER.info("Removed " + recordToRemove);
         if (recordToRemove != null) {
             Transaction transaction = session.beginTransaction();
             session.delete(recordToRemove);
