@@ -39,4 +39,15 @@ public class Repository {
         }
     }
 
+    public <T> void removeRecord(T recordToRemove) {
+        if (recordToRemove != null) {
+            Transaction transaction = session.beginTransaction();
+            session.delete(recordToRemove);
+            transaction.commit();
+            System.out.println(recordToRemove + " was removed");
+        } else {
+            System.out.println(recordToRemove + "was not removed!");
+        }
+    }
+
 }

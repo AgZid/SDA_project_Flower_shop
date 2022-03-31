@@ -28,6 +28,4 @@ public class FlowersOrder {
     @ManyToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
-
-
 }
