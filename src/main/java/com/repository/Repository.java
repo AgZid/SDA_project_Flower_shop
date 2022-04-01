@@ -12,21 +12,22 @@ public class Repository {
     private static final Logger LOGGER = Logger.getLogger(Repository.class);
     private static Session session = HibernateUtil.getSessionFactory().openSession();
 
-    public <T> List<T> findAll(String SQLQuery, Class<T> queryClass) {
+    public <T> List<T> findAll(String SQLQuery, Class<T> queryClass, String tableName) {
         LOGGER.info("Find all from " + queryClass);
-        return session.createQuery(SQLQuery, queryClass).getResultList();
+        return session.createQuery(String.format(SQLQuery, tableName), queryClass)
+                .getResultList();
     }
 
-    public <T> T findById(String SQLQuery, Class<T> queryClass, Integer id) {
+    public <T> T findById(String SQLQuery, Class<T> queryClass, Integer id, String tableName) {
         LOGGER.info("Find by id from " + queryClass + " where id = " + id);
-        return session.createQuery(SQLQuery, queryClass)
+        return session.createQuery(String.format(SQLQuery, tableName), queryClass)
                 .setParameter("id", id)
                 .getSingleResult();
     }
 
-    public <T> T findByName(String SQLQuery, Class<T> queryClass, String name) {
+    public <T> T findByName(String SQLQuery, Class<T> queryClass, String name, String tableName) {
         LOGGER.info("Find by name from " + queryClass + " where name = " + name);
-        return session.createQuery(SQLQuery, queryClass)
+        return session.createQuery(String.format(SQLQuery, tableName), queryClass)
                 .setParameter("name", name)
                 .getSingleResult();
     }

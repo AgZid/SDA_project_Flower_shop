@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.primaryData.FromFileToObject.extractFromJsonFile;
-import static com.repository.SQLQueries.SELECT_ALL_FLOWER_BY_ID;
+import static com.repository.SQLQueries.SELECT_BY_ID;
 
 public class PrimaryData {
 
@@ -48,7 +48,7 @@ public class PrimaryData {
 
         FlowersForOrdering jonasFlowers1 = FlowersForOrdering.builder()
                 .flowersOrder(jonasOrder1)
-                .flower(repository.findById(SELECT_ALL_FLOWER_BY_ID, Flower.class, 2))
+                .flower(repository.findById(SELECT_BY_ID, Flower.class, 2, "Flower"))
                 .quantity(3)
                 .build();
 
@@ -56,7 +56,7 @@ public class PrimaryData {
 
         FlowersForOrdering jonasFlowers2 = FlowersForOrdering.builder()
                 .flowersOrder(jonasOrder1)
-                .flower(repository.findById(SELECT_ALL_FLOWER_BY_ID, Flower.class, 5))
+                .flower(repository.findById(SELECT_BY_ID, Flower.class, 5, "Flower"))
                 .quantity(5)
                 .build();
 
@@ -64,7 +64,7 @@ public class PrimaryData {
 
         FlowersForOrdering jonasFlowers3 = FlowersForOrdering.builder()
                 .flowersOrder(jonasOrder2)
-                .flower(repository.findById(SELECT_ALL_FLOWER_BY_ID, Flower.class, 10))
+                .flower(repository.findById(SELECT_BY_ID, Flower.class, 10, "Flower"))
                 .quantity(5)
                 .build();
 
