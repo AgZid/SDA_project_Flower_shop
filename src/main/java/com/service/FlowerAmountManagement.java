@@ -2,11 +2,11 @@ package com.service;
 
 import com.model.Flower;
 import com.model.FlowersForOrdering;
-import com.repository.Repository;
+import com.repository.FlowerRepository;
 
 public class FlowerAmountManagement {
 
-    Repository repository = new Repository();
+    FlowerRepository flowerRepository = new FlowerRepository();
 
     FlowersForOrdering flowersForOrdering;
 
@@ -15,16 +15,14 @@ public class FlowerAmountManagement {
     }
 
     public void reduceFlowerAmount() {
-        Flower flowerToReduceAmount = repository
-                .findById(Flower.class, flowersForOrdering.getFlower().getId(), "Flower");
+        Flower flowerToReduceAmount = flowerRepository.findById(flowersForOrdering.getFlower().getId());
         flowerToReduceAmount.setAmount(flowerToReduceAmount.getAmount() - flowersForOrdering.getQuantity());
-        repository.createOrUpdateRecord(flowerToReduceAmount);
+        flowerRepository.createAndUpdate(flowerToReduceAmount);
     }
 
     public void restoreFlowerAmount(Integer orderedAmount) {
-        Flower flowerToRestoreAmount = repository
-                .findById(Flower.class, flowersForOrdering.getFlower().getId(), "Flower");
+        Flower flowerToRestoreAmount = flowerRepository.findById(flowersForOrdering.getFlower().getId());
         flowerToRestoreAmount.setAmount(flowerToRestoreAmount.getAmount() + flowersForOrdering.getQuantity());
-        repository.createOrUpdateRecord(flowerToRestoreAmount);
+        flowerRepository.createAndUpdate(flowerToRestoreAmount);
     }
 }

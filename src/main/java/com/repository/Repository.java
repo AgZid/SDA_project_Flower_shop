@@ -1,6 +1,7 @@
 package com.repository;
 
 import com.util.HibernateUtil;
+import lombok.Data;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -8,89 +9,72 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class Repository {
+@Data
+public class Repository<T> implements CRUD<T>{
 
     private static final Logger LOGGER = Logger.getLogger(Repository.class);
-    private static final Session session = HibernateUtil.getSessionFactory().openSession();
+    protected final Session session;
+    private String tableName;
+    private Class<T> queryClass;
 
-    public <T> List<T> findAll(Class<T> queryClass, String tableName) {
+    public Repository(Class<T> queryClass) {
+        this(queryClass, queryClass.getSimpleName());
+    }
+
+    public Repository(Class<T> queryClass, String tableName) {
+        this.queryClass = queryClass;
+        this.tableName = tableName;
+        this.session = HibernateUtil.getSessionFactory().openSession();
+    }
+
+
+    @Override
+    public List<T> findAll() {
         LOGGER.info("Find all from " + queryClass);
         return session.createQuery(String.format(SQLQueries.SELECT_ALL, tableName), queryClass)
                 .getResultList();
     }
-
-    public <T> List<T> findBYForeignKey(Class<T> queryClass, String tableName, String foreignKeyFieldName, Integer id) {
-        LOGGER.info("Find by foreign key from " + queryClass);
-        String query = String.format(SQLQueries.SELECT_BY_FOREIGN_KEY, tableName, foreignKeyFieldName);
-//        String query = "SELECT p FROM FlowersOrder p join p.customer c WHERE c.id =:id";
-        System.out.println("Query: " + query);
-        return session.createQuery(query, queryClass)
-                .setParameter("id", id)
-                .getResultList();
-    }
-
-    public <T> T findById(Class<T> queryClass, Integer id, String tableName) {
+    @Override
+    public T findById(Integer id) {
         LOGGER.info("Find by id from " + queryClass + " where id = " + id);
         return session.createQuery(String.format(SQLQueries.SELECT_BY_ID, tableName), queryClass)
                 .setParameter("id", id)
                 .getSingleResult();
     }
 
-    public <T> T findByName(Class<T> queryClass, String name, String tableName) {
-        LOGGER.info("Find by name from " + queryClass + " where name = " + name);
-        return session.createQuery(String.format(SQLQueries.SELECT_BY_NAME, tableName), queryClass)
-                .setParameter("name", name)
-                .getSingleResult();
-    }
-
-    public <T> void createOrUpdateRecord(T recordToAdd) {
-        LOGGER.info("Create or update " + recordToAdd );
-        if (recordToAdd != null) {
+    @Override
+    public void createAndUpdate(T recordToCreateOrUpdate) {
+        LOGGER.info("Create or update " + recordToCreateOrUpdate);
+        if (recordToCreateOrUpdate != null) {
             Transaction transaction = session.beginTransaction();
-            session.saveOrUpdate(recordToAdd);
+            session.saveOrUpdate(recordToCreateOrUpdate);
             transaction.commit();
-            System.out.println(recordToAdd + " was saved");
+            System.out.println(recordToCreateOrUpdate + " was saved");
         } else {
-            System.out.println(recordToAdd + "was not saved!");
+            System.out.println(recordToCreateOrUpdate + "was not saved!");
         }
     }
 
-    public <T> void removeRecord(T recordToRemove) {
-        LOGGER.info("Removed " + recordToRemove);
-        if (recordToRemove != null) {
+    @Override
+    public void deleteRecord(T deleteToRemove) {
+        LOGGER.info("Removed " + deleteToRemove);
+        if (deleteToRemove != null) {
             Transaction transaction = session.beginTransaction();
-            session.delete(recordToRemove);
+            session.delete(deleteToRemove);
             transaction.commit();
-            System.out.println(recordToRemove + " was removed");
+            System.out.println(deleteToRemove + " was removed");
         } else {
-            System.out.println(recordToRemove + "was not removed!");
+            System.out.println(deleteToRemove + "was not removed!");
         }
     }
 
-    public void deleteRecordsFromTable(String tableName) {
+    @Override
+    public void deleteAll() {
         LOGGER.info("Removed all records from" + tableName);
-//
-//        try {
-//            session.beginTransaction();
-//
-//
-//            Query q1 = session.createQuery ("DELETE FROM MapField");
-//            int deleted = q1.executeUpdate ();
-//
-//            Query q2 = session.createQuery ("DELETE FROM MapRecord");
-//            int deleted = q2.executeUpdate ();
-//
-//        } catch (Exception e) {
-//            logger.error("Error :" + e);
-//            session.getTransaction().rollback();
-//        } finally {
-//            session.close();
-//        }
-
         if (tableName != null) {
             session.beginTransaction();
-            Query q1 = session.createQuery (String.format(SQLQueries.DELETE_ALL, tableName));
-            int deleted = q1.executeUpdate ();
+            Query q1 = session.createQuery(String.format(SQLQueries.DELETE_ALL, tableName));
+            int deleted = q1.executeUpdate();
             session.getTransaction().commit();
 
             System.out.println(tableName + " were removed");

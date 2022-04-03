@@ -23,7 +23,6 @@ public class Flower {
     private String intakeDate;
     private String  expires;
     private Integer amount;
-//     private Integer suppler_id;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "flower")

@@ -6,6 +6,9 @@ import com.model.Customer;
 import com.model.Flower;
 import com.model.FlowersForOrdering;
 import com.model.FlowersOrder;
+import com.repository.CustomerRepository;
+import com.repository.FlowerRepository;
+import com.repository.FlowersOrderRepository;
 import com.repository.Repository;
 
 import java.time.LocalDate;
@@ -17,12 +20,14 @@ public class PrimaryData {
 
     public void loadPrimaryData() {
 
-        com.repository.Repository repository = new Repository();
+        com.repository.FlowerRepository flowerRepository = new FlowerRepository();
+        com.repository.CustomerRepository customerRepository = new CustomerRepository();
+        com.repository.FlowersOrderRepository flowersOrderRepository = new FlowersOrderRepository();
 
         List<Flower> flowers = extractFromJsonFile("src/main/resources/flowers.json", new TypeToken<>(){});
 
         for (Flower flower : flowers) {
-            repository.createOrUpdateRecord(flower);
+            flowerRepository.createAndUpdate(flower);
         }
 
         Customer jonas = Customer.builder()
@@ -50,7 +55,7 @@ public class PrimaryData {
 
         FlowersForOrdering jonasFlowers1 = FlowersForOrdering.builder()
                 .flowersOrder(jonasOrder1)
-                .flower(repository.findById(Flower.class, 2, "Flower"))
+                .flower(flowerRepository.findById(2))
                 .quantity(3)
                 .build();
 
@@ -58,7 +63,7 @@ public class PrimaryData {
 
         FlowersForOrdering jonasFlowers2 = FlowersForOrdering.builder()
                 .flowersOrder(jonasOrder1)
-                .flower(repository.findById(Flower.class, 5, "Flower"))
+                .flower(flowerRepository.findById(5))
                 .quantity(5)
                 .build();
 
@@ -66,13 +71,13 @@ public class PrimaryData {
 
         FlowersForOrdering jonasFlowers3 = FlowersForOrdering.builder()
                 .flowersOrder(jonasOrder2)
-                .flower(repository.findById(Flower.class, 10, "Flower"))
+                .flower(flowerRepository.findById(10))
                 .quantity(5)
                 .build();
 
         jonasOrder2.setFlowersForOrderings(List.of(jonasFlowers3));
 
-        repository.createOrUpdateRecord(jonas);
+        customerRepository.createAndUpdate(jonas);
 
     }
 }

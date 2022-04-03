@@ -5,6 +5,9 @@ import com.model.Flower;
 import com.model.FlowersForOrdering;
 import com.model.FlowersOrder;
 import com.primaryData.PrimaryData;
+import com.repository.CustomerRepository;
+import com.repository.FlowerRepository;
+import com.repository.FlowersOrderRepository;
 import com.repository.Repository;
 
 import java.time.LocalDate;
@@ -13,6 +16,9 @@ import java.util.List;
 public class Main {
 
     private Repository repository;
+    private FlowerRepository flowerRepository;
+    private CustomerRepository customerRepository;
+    private FlowersOrderRepository flowersOrderRepository;
 
     public static void main(String[] args) {
 
@@ -20,30 +26,32 @@ public class Main {
 
         Main main = new Main();
 
-        main.repository = new Repository();
+        main.flowerRepository = new FlowerRepository();
+        main.customerRepository = new CustomerRepository();
+        main.flowersOrderRepository = new FlowersOrderRepository();
 
 
         System.out.println();
-        System.out.println(main.repository.findById(Flower.class, 1, "Flower"));
+        System.out.println(main.flowerRepository.findAll());
 
         System.out.println("Make order");
         FlowersOrder flowersOrder = FlowersOrder.builder()
-                .customer(main.repository.findById(Customer.class, 1, "Customer"))
+                .customer(main.customerRepository.findById(1))
                 .orderDate(LocalDate.of(2022, 5, 3))
                 .deliveryDay(LocalDate.of(2022, 5, 8))
                 .build();
 
         FlowersForOrdering flowersForOrdering = FlowersForOrdering.builder()
-                .flower(main.repository.findById(Flower.class, 1, "Flower"))
+                .flower(main.flowerRepository.findById(1))
                 .quantity(5)
                 .build();
 
         flowersOrder.setFlowersForOrderings(List.of(flowersForOrdering));
 
         System.out.println("Find by FK:");
-//             main.repository.findBYForeignKey(FlowersOrder.class, "FlowersOrder", "customer", 1).forEach(System.out::println);
+        main.flowersOrderRepository.findBYForeignKey("customer", 1).forEach(System.out::println);
 
-            main.repository.deleteRecordsFromTable("Customer");
+//            main.repository.deleteAll("Customer");
 
     }
 }
