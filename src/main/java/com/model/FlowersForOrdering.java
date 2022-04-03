@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class FlowersForOrdering {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer flowersForOrderingId;
+    private Integer id;
 
     private Integer quantity;
 

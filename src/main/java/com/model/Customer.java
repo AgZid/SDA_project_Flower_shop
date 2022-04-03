@@ -18,12 +18,12 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer customerId;
-    private String fullName;
+    private Integer id;
+    private String name;
     private String email;
     private String phoneNumber;
     private String billingAddress;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL , orphanRemoval = true)
     private List<FlowersOrder> orders;
 }

@@ -15,7 +15,7 @@ public class Flower {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer flowerId;
+    private Integer id;
     private String name;
     private Double price;
     private Double length;

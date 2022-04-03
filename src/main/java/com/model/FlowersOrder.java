@@ -1,5 +1,6 @@
 package com.model;
 
+import com.enumerators.OrderStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,13 +16,13 @@ import java.util.List;
 public class FlowersOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer flowersOrderId;
+    private Integer id;
 
-    // private boolean status;
     private LocalDate orderDate;
     private LocalDate deliveryDay;
+    private OrderStatus orderStatus;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowersOrder")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowersOrder", orphanRemoval = true)
     private List<FlowersForOrdering> flowersForOrderings;
 
     @ToString.Exclude
