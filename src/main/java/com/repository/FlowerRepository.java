@@ -17,5 +17,4 @@ public class FlowerRepository extends Repository<Flower> {
                 .setParameter("name", name)
                 .getSingleResult();
     }
-
 }

@@ -1,28 +1,28 @@
 package com.service;
 
 import com.model.Flower;
-import com.model.FlowersForOrdering;
+import com.model.OrderedEntry;
 import com.repository.FlowerRepository;
 
 public class FlowerAmountManagement {
 
     FlowerRepository flowerRepository = new FlowerRepository();
 
-    FlowersForOrdering flowersForOrdering;
+    OrderedEntry orderedEntry;
 
-    FlowerAmountManagement(FlowersForOrdering flowersForOrdering) {
-        this.flowersForOrdering = flowersForOrdering;
+    FlowerAmountManagement(OrderedEntry orderedEntry) {
+        this.orderedEntry = orderedEntry;
     }
 
     public void reduceFlowerAmount() {
-        Flower flowerToReduceAmount = flowerRepository.findById(flowersForOrdering.getFlower().getId());
-        flowerToReduceAmount.setAmount(flowerToReduceAmount.getAmount() - flowersForOrdering.getQuantity());
+        Flower flowerToReduceAmount = flowerRepository.findById(orderedEntry.getFlower().getId());
+        flowerToReduceAmount.setAmount(flowerToReduceAmount.getAmount() - orderedEntry.getQuantity());
         flowerRepository.createAndUpdate(flowerToReduceAmount);
     }
 
     public void restoreFlowerAmount(Integer orderedAmount) {
-        Flower flowerToRestoreAmount = flowerRepository.findById(flowersForOrdering.getFlower().getId());
-        flowerToRestoreAmount.setAmount(flowerToRestoreAmount.getAmount() + flowersForOrdering.getQuantity());
+        Flower flowerToRestoreAmount = flowerRepository.findById(orderedEntry.getFlower().getId());
+        flowerToRestoreAmount.setAmount(flowerToRestoreAmount.getAmount() + orderedEntry.getQuantity());
         flowerRepository.createAndUpdate(flowerToRestoreAmount);
     }
 }

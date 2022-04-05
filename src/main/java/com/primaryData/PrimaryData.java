@@ -4,12 +4,11 @@ import com.enumerators.OrderStatus;
 import com.google.gson.reflect.TypeToken;
 import com.model.Customer;
 import com.model.Flower;
-import com.model.FlowersForOrdering;
+import com.model.OrderedEntry;
 import com.model.FlowersOrder;
 import com.repository.CustomerRepository;
 import com.repository.FlowerRepository;
 import com.repository.FlowersOrderRepository;
-import com.repository.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,7 +30,7 @@ public class PrimaryData {
         }
 
         Customer jonas = Customer.builder()
-                .name("Jonas Jonaitis")
+                .fullName("Jonas Jonaitis")
                 .email("jonas@org.com")
                 .phoneNumber("223658")
                 .billingAddress("Address 1")
@@ -53,29 +52,29 @@ public class PrimaryData {
 
         jonas.setOrders(List.of(jonasOrder1, jonasOrder2));
 
-        FlowersForOrdering jonasFlowers1 = FlowersForOrdering.builder()
+        OrderedEntry jonasFlowers1 = OrderedEntry.builder()
                 .flowersOrder(jonasOrder1)
                 .flower(flowerRepository.findById(2))
                 .quantity(3)
                 .build();
 
-        jonasOrder1.setFlowersForOrderings(List.of(jonasFlowers1));
+        jonasOrder1.setOrderedFlowersQuantities(List.of(jonasFlowers1));
 
-        FlowersForOrdering jonasFlowers2 = FlowersForOrdering.builder()
+        OrderedEntry jonasFlowers2 = OrderedEntry.builder()
                 .flowersOrder(jonasOrder1)
                 .flower(flowerRepository.findById(5))
                 .quantity(5)
                 .build();
 
-        jonasOrder1.setFlowersForOrderings(List.of(jonasFlowers1, jonasFlowers2));
+        jonasOrder1.setOrderedFlowersQuantities(List.of(jonasFlowers1, jonasFlowers2));
 
-        FlowersForOrdering jonasFlowers3 = FlowersForOrdering.builder()
+        OrderedEntry jonasFlowers3 = OrderedEntry.builder()
                 .flowersOrder(jonasOrder2)
                 .flower(flowerRepository.findById(10))
                 .quantity(5)
                 .build();
 
-        jonasOrder2.setFlowersForOrderings(List.of(jonasFlowers3));
+        jonasOrder2.setOrderedFlowersQuantities(List.of(jonasFlowers3));
 
         customerRepository.createAndUpdate(jonas);
 

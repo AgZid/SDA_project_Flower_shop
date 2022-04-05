@@ -3,7 +3,6 @@ package com.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -26,6 +25,6 @@ public class Flower {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "flower")
-    private List<FlowersForOrdering> flowersForOrdering;
+    private List<OrderedEntry> orderedEntry;
 
 }

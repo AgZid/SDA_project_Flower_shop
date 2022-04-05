@@ -1,8 +1,6 @@
 package com;
 
-import com.model.Customer;
-import com.model.Flower;
-import com.model.FlowersForOrdering;
+import com.model.OrderedEntry;
 import com.model.FlowersOrder;
 import com.primaryData.PrimaryData;
 import com.repository.CustomerRepository;
@@ -41,12 +39,12 @@ public class Main {
                 .deliveryDay(LocalDate.of(2022, 5, 8))
                 .build();
 
-        FlowersForOrdering flowersForOrdering = FlowersForOrdering.builder()
+        OrderedEntry orderedEntry = OrderedEntry.builder()
                 .flower(main.flowerRepository.findById(1))
                 .quantity(5)
                 .build();
 
-        flowersOrder.setFlowersForOrderings(List.of(flowersForOrdering));
+        flowersOrder.setOrderedFlowersQuantities(List.of(orderedEntry));
 
         System.out.println("Find by FK:");
         main.flowersOrderRepository.findBYForeignKey("customer", 1).forEach(System.out::println);

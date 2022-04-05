@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Builder
 
 @Entity
-public class FlowersForOrdering {
+public class OrderedEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

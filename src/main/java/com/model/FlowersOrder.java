@@ -22,8 +22,8 @@ public class FlowersOrder {
     private LocalDate deliveryDay;
     private OrderStatus orderStatus;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowersOrder", orphanRemoval = true)
-    private List<FlowersForOrdering> flowersForOrderings;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowersOrder"/*, orphanRemoval = true*/)
+    private List<OrderedEntry> orderedFlowersQuantities;
 
     @ToString.Exclude
     @ManyToOne
