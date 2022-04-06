@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,11 +19,12 @@ public class FlowersOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
     private LocalDate deliveryDay;
+    private String deliveryAddress;
     private OrderStatus orderStatus;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowersOrder"/*, orphanRemoval = true*/)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowersOrder")
     private List<OrderedEntry> orderedFlowersQuantities;
 
     @ToString.Exclude

@@ -4,13 +4,13 @@ import com.model.Flower;
 import com.model.OrderedEntry;
 import com.repository.FlowerRepository;
 
-public class FlowerAmountManagement {
+public class FlowerOrderingServicies {
 
     FlowerRepository flowerRepository = new FlowerRepository();
 
     OrderedEntry orderedEntry;
 
-    FlowerAmountManagement(OrderedEntry orderedEntry) {
+    FlowerOrderingServicies(OrderedEntry orderedEntry) {
         this.orderedEntry = orderedEntry;
     }
 
