@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,7 +47,7 @@ class FlowersOrderRepositoryTest {
 
         FlowersOrder testFlowersOrder = FlowersOrder.builder()
                 .orderStatus(OrderStatus.ORDERED)
-                .orderDate(LocalDate.of(2022, 3, 5))
+                .orderDate(LocalDateTime.now())
                 .deliveryDay(LocalDate.of(2022, 5, 8))
                 .build();
 
@@ -56,11 +57,11 @@ class FlowersOrderRepositoryTest {
                 .flowersOrder(testFlowersOrder)
                 .build();
 
-        testFlowersOrder.setOrderedFlowersQuantities(List.of(testOrderedEntry));
+        testFlowersOrder.setOrderedEntries(List.of(testOrderedEntry));
 
         FlowersOrder testFlowersOrder2 = FlowersOrder.builder()
                 .orderStatus(OrderStatus.ORDERED)
-                .orderDate(LocalDate.of(2022, 4, 5))
+                .orderDate(LocalDateTime.now())
                 .deliveryDay(LocalDate.of(2022, 5, 8))
                 .build();
 
@@ -70,7 +71,7 @@ class FlowersOrderRepositoryTest {
                 .flowersOrder(testFlowersOrder2)
                 .build();
 
-        testFlowersOrder2.setOrderedFlowersQuantities(List.of(testOrderedEntry2));
+        testFlowersOrder2.setOrderedEntries(List.of(testOrderedEntry2));
 
         flowersOrderRepository.createAndUpdate(testFlowersOrder);
         flowersOrderRepository.createAndUpdate(testFlowersOrder2);
@@ -78,13 +79,13 @@ class FlowersOrderRepositoryTest {
 
     @AfterEach
     public void deleteOrders() {
-        flowersOrderRepository.findAll().stream().forEach(flowersOrder -> flowersOrderRepository.deleteRecord(flowersOrder));
+        flowersOrderRepository.findAll().forEach(flowersOrder -> flowersOrderRepository.deleteRecord(flowersOrder));
     }
 
     @Test
     void createAndUpdate_create() {
         FlowersOrder testFlowerOrder = FlowersOrder.builder()
-                .orderDate(LocalDate.of(2022, 4, 1))
+                .orderDate(LocalDateTime.now())
                 .deliveryDay(LocalDate.of(2022, 4, 20))
                 .orderStatus(OrderStatus.ORDERED)
                 .build();
@@ -93,7 +94,7 @@ class FlowersOrderRepositoryTest {
                 .flower(flowerRepository.findByName("TestTulpe"))
                 .quantity(22)
                 .build();
-        testFlowerOrder.setOrderedFlowersQuantities(List.of(testOrderEntity));
+        testFlowerOrder.setOrderedEntries(List.of(testOrderEntity));
 
         flowersOrderRepository.createAndUpdate(testFlowerOrder);
 
@@ -116,7 +117,7 @@ class FlowersOrderRepositoryTest {
     @Test
     void findByForeignKey() {
         FlowersOrder testFlowerOrder = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
-        OrderedEntry testOrederEntity = testFlowerOrder.getOrderedFlowersQuantities().stream().findFirst().orElse(null);
+        OrderedEntry testOrederEntity = testFlowerOrder.getOrderedEntries().stream().findFirst().orElse(null);
         Integer testForeignKeyId = testOrederEntity.getId();
         List<FlowersOrder> orderedFlowersQuantities = flowersOrderRepository.findBYForeignKey("orderedFlowersQuantities", testForeignKeyId);
         assertThat(orderedFlowersQuantities).contains(testFlowerOrder);
@@ -137,6 +138,6 @@ class FlowersOrderRepositoryTest {
         FlowersOrder flowersOrders = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
         flowersOrderRepository.deleteRecord(flowersOrders);
 
-        assertThat(flowersOrderRepository.findAll().size()).isEqualTo(01);
+        assertThat(flowersOrderRepository.findAll().size()).isEqualTo(0);
     }
 }

@@ -25,7 +25,7 @@ public class FlowersOrder {
     private OrderStatus orderStatus;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flowersOrder")
-    private List<OrderedEntry> orderedFlowersQuantities;
+    private List<OrderedEntry> orderedEntries;
 
     @ToString.Exclude
     @ManyToOne

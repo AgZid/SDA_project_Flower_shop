@@ -1,5 +1,6 @@
 package com.service;
 
+import com.model.Customer;
 import com.repository.CustomerRepository;
 
 import java.util.regex.Matcher;
@@ -18,8 +19,8 @@ public class MenuCheckingService {
 
     public boolean isUserFlowerShopCustomer(String userName) {
         CustomerRepository customerRepository = new CustomerRepository();
-
-        return !customerRepository.findByFullName(userName).equals(null);
+        Customer byFullName = customerRepository.findByFullName(userName);
+        return byFullName != null;
     }
 
 

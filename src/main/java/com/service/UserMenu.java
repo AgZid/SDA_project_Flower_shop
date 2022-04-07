@@ -8,7 +8,6 @@ import com.repository.CustomerRepository;
 import com.repository.FlowerRepository;
 import com.repository.FlowersOrderRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +21,7 @@ public class UserMenu {
     FlowerRepository flowerRepository = new FlowerRepository();
     CustomerRepository customerRepository = new CustomerRepository();
     FlowersOrderRepository flowersOrderRepository = new FlowersOrderRepository();
+    FlowerOrderingServices orderingServices = new FlowerOrderingServices();
 
     Customer customer;
 
@@ -37,7 +37,7 @@ public class UserMenu {
         String customerFullName = scanner.nextLine();
 
         if (!checkingService.isUserFlowerShopCustomer(customerFullName)) {
-            createNewCustomer();
+            createNewCustomer(customerFullName);
         } else {
             customer = customerRepository.findByFullName(customerFullName);
         }
@@ -45,7 +45,7 @@ public class UserMenu {
         showCustomerMenu();
     }
 
-    public void createNewCustomer() {
+    public void createNewCustomer(String fullName) {
         System.out.println("Enter email:");
         String email = scanner.nextLine();
         checkingService.checkEmail(email);
@@ -57,7 +57,7 @@ public class UserMenu {
         String billingAddress = scanner.nextLine();
 
         customer = new Customer
-                (null, customer.getFullName(), email, phoneNumber, billingAddress, null);
+                (null, fullName, email, phoneNumber, billingAddress, null);
 
         customerRepository.createAndUpdate(customer);
     }
@@ -68,24 +68,31 @@ public class UserMenu {
         System.out.println("1 - Show all flowers");
         System.out.println("2 - Show my flower orders");
         System.out.println("3 - Make new order");
-        System.out.println("4 - Edit an order");
+        System.out.println("4 - Cancel order");
         System.out.println("5 - Edit contact information");
         System.out.println("0 - Exit");
 
         String customerSelection = scanner.nextLine();
-        while(!customerSelection.equals("0")) {
-            if (customerSelection.equals("1")) {
-                showAllFlowers();
-            } else if (customerSelection.equals("2")) {
-                showCustomerOrders();
-            } else if (customerSelection.equals("3")) {
-                makeNewOrder();
-            } else if (customerSelection.equals("4")) {
-                modifyOrder();
-            } else if (customerSelection.equals("5")) {
+        while (!customerSelection.equals("0")) {
+            switch (customerSelection) {
+                case "1":
+                    showAllFlowers();
+                    break;
+                case "2":
+                    showCustomerOrders();
+                    break;
+                case "3":
+                    makeNewOrder();
+                    break;
+                case "4":
+                    cancelOrder();
+                    break;
+                case "5":
 //                editCustomer();
-            } else {
-                System.out.println("Bey");
+                    break;
+                default:
+                    System.out.println("Bey");
+                    break;
             }
         }
     }
@@ -100,7 +107,7 @@ public class UserMenu {
         String userSelection = "1";
 
         List<OrderedEntry> orderedEntries = new ArrayList<>();
-        while(userSelection.equals("1")) {
+        while (userSelection.equals("1")) {
 
             System.out.println("Select flower ID from the list below:");
             showAllFlowers();
@@ -126,30 +133,27 @@ public class UserMenu {
         customerRepository.createAndUpdate(customer);
     }
 
-    public void modifyOrder() {
+    public void cancelOrder() {
         List<FlowersOrder> orders = customer.getOrders();
 
         if (orders.size() > 0) {
-            showModificationMenu();
+            Integer orderId;
 
-            System.out.println("Enter order Id:");
-            Integer orderId = Integer.parseInt(scanner.nextLine());
+            if (orders.size() > 1) {
+                System.out.println();
 
-            FlowersOrder orderToModify = flowersOrderRepository.findById(orderId);
-//            makeOrderModification();
-        }
-        System.out.println();
+                orders.stream().forEach(order -> System.out.println(flowersOrderRepository.findById(order.getId())));
+
+                System.out.println("Enter flower order Id:");
+                orderId = Integer.parseInt(scanner.nextLine());
+            } else {
+                orderId = orders.stream().findFirst().orElse(null).getId();
+            }
+
+            orderingServices.cancelOrder(orderId);
+         } else System.out.println("List of orders is empty");
     }
 
-    public void showModificationMenu() {
-        System.out.println();
-        System.out.println("Select an option:");
-        System.out.println("1 - Cancel order");
-        System.out.println("2 - Change flowers");
-        System.out.println("3 - Change flowers quantity");
-        System.out.println("4 - Change delivery date");
-        System.out.println("0 - Exit modification");
-    }
 
     public void showAllFlowers() {
         flowerRepository.findAll().forEach(System.out::println);

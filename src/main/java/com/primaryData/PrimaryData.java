@@ -11,6 +11,7 @@ import com.repository.FlowerRepository;
 import com.repository.FlowersOrderRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.primaryData.FromFileToObject.extractFromJsonFile;
@@ -38,14 +39,14 @@ public class PrimaryData {
 
         FlowersOrder jonasOrder1 = FlowersOrder.builder()
                 .customer(jonas)
-                .orderDate(LocalDate.of(2022, 3, 5))
+                .orderDate(LocalDateTime.now())
                 .deliveryDay(LocalDate.of(2022, 3, 15))
                 .orderStatus(OrderStatus.ORDERED)
                 .build();
 
         FlowersOrder jonasOrder2 = FlowersOrder.builder()
                 .customer(jonas)
-                .orderDate(LocalDate.of(2022, 4, 1))
+                .orderDate(LocalDateTime.now())
                 .deliveryDay(LocalDate.of(2022, 4, 10))
                 .orderStatus(OrderStatus.CANCELED)
                 .build();
@@ -58,7 +59,7 @@ public class PrimaryData {
                 .quantity(3)
                 .build();
 
-        jonasOrder1.setOrderedFlowersQuantities(List.of(jonasFlowers1));
+        jonasOrder1.setOrderedEntries(List.of(jonasFlowers1));
 
         OrderedEntry jonasFlowers2 = OrderedEntry.builder()
                 .flowersOrder(jonasOrder1)
@@ -66,7 +67,7 @@ public class PrimaryData {
                 .quantity(5)
                 .build();
 
-        jonasOrder1.setOrderedFlowersQuantities(List.of(jonasFlowers1, jonasFlowers2));
+        jonasOrder1.setOrderedEntries(List.of(jonasFlowers1, jonasFlowers2));
 
         OrderedEntry jonasFlowers3 = OrderedEntry.builder()
                 .flowersOrder(jonasOrder2)
@@ -74,9 +75,8 @@ public class PrimaryData {
                 .quantity(5)
                 .build();
 
-        jonasOrder2.setOrderedFlowersQuantities(List.of(jonasFlowers3));
+        jonasOrder2.setOrderedEntries(List.of(jonasFlowers3));
 
         customerRepository.createAndUpdate(jonas);
-
     }
 }
