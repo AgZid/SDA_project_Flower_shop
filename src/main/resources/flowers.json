@@ -3,200 +3,140 @@
     "flowerId": null,
     "name": "Alstroemerias",
     "price": 2.79,
-    "length": 45,
     "color": "Khaki",
-    "intakeDate": "2022-05-18",
-    "expires": "2022-05-30",
     "amount": 38
   },
   {
     "flowerId": null,
     "name": "Ranunculus",
     "price": 8.54,
-    "length": 34,
     "color": "Crimson",
-    "intakeDate": "2022-04-12",
-    "expires": "2022-05-02",
     "amount": 44
   },
   {
     "flowerId": null,
     "name": "Roses",
     "price": 6.45,
-    "length": 34,
     "color": "Red",
-    "intakeDate": "2022-05-16",
-    "expires": "2022-05-30",
     "amount": 26
   },
   {
     "flowerId": null,
     "name": "Hyacinth",
     "price": 2.42,
-    "length": 49,
     "color": "Orange",
-    "intakeDate": "2022-03-31",
-    "expires": "2022-04-26",
     "amount": 41
   },
   {
     "flowerId": null,
     "name": "Lamiaceae",
     "price": 8.28,
-    "length": 42,
     "color": "Orange",
-    "intakeDate": "2022-03-21",
-    "expires": "2022-04-01",
     "amount": 38
   },
   {
     "flowerId": null,
     "name": "Tulips",
     "price": 3.67,
-    "length": 30,
     "color": "Red",
-    "intakeDate": "2022-04-11",
-    "expires": "2022-04-30",
     "amount": 23
   },
   {
     "flowerId": null,
     "name": "Tulips",
     "price": 4.22,
-    "length": 34,
     "color": "Yellow",
-    "intakeDate": "2022-04-01",
-    "expires": "2022-04-11",
     "amount": 40
   },
   {
     "flowerId": null,
     "name": "Roses",
     "price": 5.0,
-    "length": 45,
     "color": "Blue",
-    "intakeDate": "2022-03-20",
-    "expires": "2022-04-10",
     "amount": 22
   },
   {
     "flowerId": null,
     "name": "Roses",
     "price": 6.09,
-    "length": 44,
     "color": "Red",
-    "intakeDate": "2022-04-01",
-    "expires": "2022-05-09",
     "amount": 25
   },
   {
     "flowerId": null,
     "name": "Gerbera",
     "price": 9.17,
-    "length": 45,
     "color": "Goldenrod",
-    "intakeDate": "2022-04-04",
-    "expires": "2022-04-14",
     "amount": 46
   },
   {
     "flowerId": null,
     "name": "Dahlia",
     "price": 2.71,
-    "length": 33,
     "color": "Khaki",
-    "intakeDate": "2022-04-25",
-    "expires": "2022-05-07",
     "amount": 41
   },
   {
     "flowerId": null,
     "name": "Chrysanthemum",
     "price": 3.99,
-    "length": 46,
     "color": "Aquamarine",
-    "intakeDate": "2022-03-03",
-    "expires": "2022-03-20",
     "amount": 44
   },
   {
     "flowerId": null,
     "name": "Zinnia",
     "price": 3.5,
-    "length": 47,
     "color": "Aquamarine",
-    "intakeDate": "2022-05-15",
-    "expires": "2022-05-27",
     "amount": 31
   },
   {
     "flowerId": null,
     "name": "Iris",
     "price": 4.64,
-    "length": 25,
     "color": "Puce",
-    "intakeDate": "2022-04-21",
-    "expires": "2022-05-14",
     "amount": 46
   },
   {
     "flowerId": null,
     "name": "Hydrangea",
     "price": 8.62,
-    "length": 49,
     "color": "Aquamarine",
-    "intakeDate": "2022-04-23",
-    "expires": "2022-05-19",
     "amount": 28
   },
   {
     "flowerId": null,
     "name": "Daffodil",
     "price": 6.96,
-    "length": 28,
     "color": "Mauv",
-    "intakeDate": "2022-04-10",
-    "expires": "2022-04-25",
     "amount": 38
   },
   {
     "flowerId": null,
     "name": "Roses",
     "price": 4.11,
-    "length": 46,
     "color": "Puce",
-    "intakeDate": "2022-03-17",
-    "expires": "2022-03-30",
     "amount": 49
   },
   {
     "flowerId": null,
     "name": "Daffodil",
     "price": 1.69,
-    "length": 40,
     "color": "Pink",
-    "intakeDate": "2022-04-01",
-    "expires": "2022-04-15",
     "amount": 26
   },
   {
     "flowerId": null,
     "name": "Zinnia",
     "price": 9.01,
-    "length": 31,
     "color": "Turquoise",
-    "intakeDate": "2022-04-06",
-    "expires": "2022-04-22",
     "amount": 43
   },
   {
     "flowerId": null,
     "name": "Ranunculus",
     "price": 1.76,
-    "length": 46,
     "color": "Purple",
-    "intakeDate": "2022-04-09",
-    "expires": "2022-04-20",
     "amount": 37
   }
 ]

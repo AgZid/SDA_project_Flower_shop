@@ -2,7 +2,6 @@ package com.repository;
 
 import com.util.HibernateUtil;
 import lombok.Data;
-import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -12,7 +11,6 @@ import java.util.List;
 @Data
 public class Repository<T> implements CRUD<T>{
 
-//    private static final Logger LOGGER = Logger.getLogger(Repository.class);
     protected final Session session;
     private String tableName;
     private Class<T> queryClass;
@@ -30,13 +28,11 @@ public class Repository<T> implements CRUD<T>{
 
     @Override
     public List<T> findAll() {
-//        LOGGER.info("Find all from " + queryClass);
         return session.createQuery(String.format(SQLQueries.SELECT_ALL, tableName), queryClass)
                 .getResultList();
     }
     @Override
     public T findById(Integer id) {
-//        LOGGER.info("Find by id from " + queryClass + " where id = " + id);
         return session.createQuery(String.format(SQLQueries.SELECT_BY_ID, tableName), queryClass)
                 .setParameter("id", id)
                 .getSingleResult();
@@ -44,7 +40,6 @@ public class Repository<T> implements CRUD<T>{
 
     @Override
     public void createAndUpdate(T recordToCreateOrUpdate) {
-//        LOGGER.info("Create or update " + recordToCreateOrUpdate);
         if (recordToCreateOrUpdate != null) {
             Transaction transaction = session.beginTransaction();
             session.saveOrUpdate(recordToCreateOrUpdate);
@@ -57,7 +52,6 @@ public class Repository<T> implements CRUD<T>{
 
     @Override
     public void deleteRecord(T deleteToRemove) {
-//        LOGGER.info("Removed " + deleteToRemove);
         if (deleteToRemove != null) {
             Transaction transaction = session.beginTransaction();
             session.delete(deleteToRemove);
@@ -70,7 +64,6 @@ public class Repository<T> implements CRUD<T>{
 
     @Override
     public void deleteAll() {
-//        LOGGER.info("Removed all records from" + tableName);
         if (tableName != null) {
             session.beginTransaction();
             Query q1 = session.createQuery(String.format(SQLQueries.DELETE_ALL, tableName));

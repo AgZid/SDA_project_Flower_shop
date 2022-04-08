@@ -63,17 +63,22 @@ public class UserMenu {
     }
 
     public void showCustomerMenu() {
-        System.out.println();
-        System.out.println("Select an option:");
-        System.out.println("1 - Show all flowers");
-        System.out.println("2 - Show my flower orders");
-        System.out.println("3 - Make new order");
-        System.out.println("4 - Cancel order");
-        System.out.println("5 - Edit contact information");
-        System.out.println("0 - Exit");
 
-        String customerSelection = scanner.nextLine();
+        String customerSelection = "1";
+
         while (!customerSelection.equals("0")) {
+
+            System.out.println();
+            System.out.println("Select an option:");
+            System.out.println("1 - Show all flowers");
+            System.out.println("2 - Show my flower orders");
+            System.out.println("3 - Make new order");
+            System.out.println("4 - Cancel order");
+            System.out.println("5 - Edit contact information");
+            System.out.println("0 - Exit");
+
+            customerSelection = scanner.nextLine();
+
             switch (customerSelection) {
                 case "1":
                     showAllFlowers();
@@ -94,6 +99,8 @@ public class UserMenu {
                     System.out.println("Bey");
                     break;
             }
+
+
         }
     }
 
@@ -117,18 +124,34 @@ public class UserMenu {
             System.out.println("Enter quantity:");
             Integer flowerQuantity = Integer.parseInt(scanner.nextLine());
 
-            orderedEntries.add(
-                    new OrderedEntry(null, flowerQuantity, flowerRepository.findById(flowerId), null));
+            OrderedEntry orderedEntry = new OrderedEntry(null, flowerQuantity, flowerRepository.findById(flowerId), null);
+
+            orderingServices.reduceFlowerAmount(orderedEntry);
+
+            orderedEntries.add(orderedEntry);
             System.out.println("Enter 0 - finish order, 1 - select more flowers");
 
             userSelection = scanner.nextLine();
         }
 
-        List<FlowersOrder> orders = customer.getOrders();
-        orders.add(
-                new FlowersOrder(null, LocalDateTime.now(), null, deliveryAddress,
-                        OrderStatus.ORDERED, orderedEntries, customer));
-        customer.setOrders(orders);
+        addFlowerOrder(deliveryAddress, orderedEntries);
+    }
+
+    private void addFlowerOrder(String deliveryAddress, List<OrderedEntry> orderedEntries) {
+
+        FlowersOrder flowersOrder = new FlowersOrder(null, LocalDateTime.now(), null, deliveryAddress,
+                OrderStatus.ORDERED, orderedEntries, customer);
+
+        orderedEntries.forEach(orderedEntry -> orderedEntry.setFlowersOrder(flowersOrder));
+
+        if (customer.getOrders() != null) {
+
+            List<FlowersOrder> orders = customer.getOrders();
+            orders.add(flowersOrder);
+            customer.setOrders(orders);
+        } else {
+            customer.setOrders(List.of(flowersOrder));
+        }
 
         customerRepository.createAndUpdate(customer);
     }
@@ -142,7 +165,8 @@ public class UserMenu {
             if (orders.size() > 1) {
                 System.out.println();
 
-                orders.stream().forEach(order -> System.out.println(flowersOrderRepository.findById(order.getId())));
+                orders.stream().filter(order -> order.getOrderStatus() == OrderStatus.ORDERED)
+                        .forEach(System.out::println);
 
                 System.out.println("Enter flower order Id:");
                 orderId = Integer.parseInt(scanner.nextLine());
@@ -151,7 +175,7 @@ public class UserMenu {
             }
 
             orderingServices.cancelOrder(orderId);
-         } else System.out.println("List of orders is empty");
+        } else System.out.println("List of orders is empty");
     }
 
 
@@ -160,6 +184,11 @@ public class UserMenu {
     }
 
     public void showCustomerOrders() {
-        customer.getOrders().forEach(System.out::println);
+        try {
+            customer.getOrders().forEach(System.out::println);
+        } catch( NullPointerException e)
+    {
+        System.out.println("No orders in a list.");
     }
+}
 }

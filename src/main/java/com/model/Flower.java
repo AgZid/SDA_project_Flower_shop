@@ -17,10 +17,7 @@ public class Flower {
     private Integer id;
     private String name;
     private Double price;
-    private Double length;
     private String color;
-    private String intakeDate;
-    private String  expires;
     private Integer amount;
 
     @ToString.Exclude

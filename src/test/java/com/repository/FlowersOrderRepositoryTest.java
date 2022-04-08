@@ -25,21 +25,15 @@ class FlowersOrderRepositoryTest {
         Flower roze = Flower.builder()
                 .name("TestRoze")
                 .price(5.5)
-                .intakeDate("TestDate1")
-                .expires(("TestaDate2"))
                 .color("RozeColor")
-                .length(50.0)
-                .amount(40)
+                .amount(50)
                 .build();
 
         Flower tulpe = Flower.builder()
                 .name("TestTulpe")
                 .price(2.0)
-                .intakeDate("TestDate1")
-                .expires(("TestaDate2"))
                 .color("TestColor")
-                .length(20.0)
-                .amount(50)
+                .amount(60)
                 .build();
 
         flowerRepository.createAndUpdate(roze);
