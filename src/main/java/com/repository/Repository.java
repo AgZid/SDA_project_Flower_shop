@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class Repository<T> implements CRUD<T>{
 
-    protected final Session session;
+    public static Session session = HibernateUtil.getSessionFactory().openSession();
     private String tableName;
     private Class<T> queryClass;
 
@@ -22,7 +22,6 @@ public class Repository<T> implements CRUD<T>{
     public Repository(Class<T> queryClass, String tableName) {
         this.queryClass = queryClass;
         this.tableName = tableName;
-        this.session = HibernateUtil.getSessionFactory().openSession();
     }
 
 
@@ -39,7 +38,7 @@ public class Repository<T> implements CRUD<T>{
     }
 
     @Override
-    public void createAndUpdate(T recordToCreateOrUpdate) {
+    public void createOrUpdate(T recordToCreateOrUpdate) {
         if (recordToCreateOrUpdate != null) {
             Transaction transaction = session.beginTransaction();
             session.saveOrUpdate(recordToCreateOrUpdate);

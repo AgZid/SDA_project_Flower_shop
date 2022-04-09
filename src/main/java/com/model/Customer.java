@@ -6,8 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.persistence.criteria.Order;
+import java.util.ArrayList;
 import java.util.List;
-
 
 @Data
 @NoArgsConstructor
@@ -22,7 +23,6 @@ public class Customer {
     private String fullName;
     private String email;
     private String phoneNumber;
-    private String billingAddress;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL , orphanRemoval = true)
     private List<FlowersOrder> orders;

@@ -17,19 +17,17 @@ class CustomerRepositoryTest {
         Customer johnTest = Customer.builder()
                 .fullName("John Test")
                 .phoneNumber("TestPhoneNumber1")
-                .billingAddress("TestAddress1")
                 .email("TestEmail1")
                 .build();
 
         Customer tomTest = Customer.builder()
                 .fullName("Tom Test")
                 .phoneNumber("TestPhoneNumber2")
-                .billingAddress("TestAddress2")
                 .email("TestEmail2")
                 .build();
 
-        CUSTOMER_REPOSITORY.createAndUpdate(johnTest);
-        CUSTOMER_REPOSITORY.createAndUpdate(tomTest);
+        CUSTOMER_REPOSITORY.createOrUpdate(johnTest);
+        CUSTOMER_REPOSITORY.createOrUpdate(tomTest);
     }
 
     @AfterEach
@@ -40,12 +38,12 @@ class CustomerRepositoryTest {
     @Test
     void createAndUpdate_update() {
         Customer testCustomer = CUSTOMER_REPOSITORY.findByFullName("Tom Test");
-        testCustomer.setBillingAddress("New Billing Address");
+        testCustomer.setEmail("New email address");
 
-        CUSTOMER_REPOSITORY.createAndUpdate(testCustomer);
+        CUSTOMER_REPOSITORY.createOrUpdate(testCustomer);
 
-        assertThat(CUSTOMER_REPOSITORY.findById(testCustomer.getId()).getBillingAddress())
-                .isEqualTo("New Billing Address");
+        assertThat(CUSTOMER_REPOSITORY.findById(testCustomer.getId()).getEmail())
+                .isEqualTo("New email address");
     }
 
     @Test
@@ -53,11 +51,10 @@ class CustomerRepositoryTest {
         Customer testTest = Customer.builder()
                 .fullName("Test Test")
                 .phoneNumber("TestPhone")
-                .billingAddress("TestAddress")
                 .email("TestEmail")
                 .build();
 
-        CUSTOMER_REPOSITORY.createAndUpdate(testTest);
+        CUSTOMER_REPOSITORY.createOrUpdate(testTest);
 
         assertThat(CUSTOMER_REPOSITORY.findAll().size()).isEqualTo(3);
     }

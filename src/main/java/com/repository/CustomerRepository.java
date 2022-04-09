@@ -1,7 +1,6 @@
 package com.repository;
 
 import com.model.Customer;
-import org.apache.log4j.Logger;
 
 import javax.persistence.NoResultException;
 

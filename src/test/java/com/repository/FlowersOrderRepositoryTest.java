@@ -36,8 +36,8 @@ class FlowersOrderRepositoryTest {
                 .amount(60)
                 .build();
 
-        flowerRepository.createAndUpdate(roze);
-        flowerRepository.createAndUpdate(tulpe);
+        flowerRepository.createOrUpdate(roze);
+        flowerRepository.createOrUpdate(tulpe);
 
         FlowersOrder testFlowersOrder = FlowersOrder.builder()
                 .orderStatus(OrderStatus.ORDERED)
@@ -67,8 +67,8 @@ class FlowersOrderRepositoryTest {
 
         testFlowersOrder2.setOrderedEntries(List.of(testOrderedEntry2));
 
-        flowersOrderRepository.createAndUpdate(testFlowersOrder);
-        flowersOrderRepository.createAndUpdate(testFlowersOrder2);
+        flowersOrderRepository.createOrUpdate(testFlowersOrder);
+        flowersOrderRepository.createOrUpdate(testFlowersOrder2);
     }
 
     @AfterEach
@@ -90,7 +90,7 @@ class FlowersOrderRepositoryTest {
                 .build();
         testFlowerOrder.setOrderedEntries(List.of(testOrderEntity));
 
-        flowersOrderRepository.createAndUpdate(testFlowerOrder);
+        flowersOrderRepository.createOrUpdate(testFlowerOrder);
 
         assertThat(flowersOrderRepository.findAll().size()).isEqualTo(3);
     }
@@ -111,8 +111,8 @@ class FlowersOrderRepositoryTest {
     @Test
     void findByForeignKey() {
         FlowersOrder testFlowerOrder = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
-        OrderedEntry testOrederEntity = testFlowerOrder.getOrderedEntries().stream().findFirst().orElse(null);
-        Integer testForeignKeyId = testOrederEntity.getId();
+        OrderedEntry testOrderEntity = testFlowerOrder.getOrderedEntries().stream().findFirst().orElse(null);
+        Integer testForeignKeyId = testOrderEntity.getId();
         List<FlowersOrder> orderedFlowersQuantities = flowersOrderRepository.findBYForeignKey("orderedFlowersQuantities", testForeignKeyId);
         assertThat(orderedFlowersQuantities).contains(testFlowerOrder);
 

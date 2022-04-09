@@ -27,14 +27,13 @@ public class PrimaryData {
         List<Flower> flowers = extractFromJsonFile("src/main/resources/flowers.json", new TypeToken<>(){});
 
         for (Flower flower : flowers) {
-            flowerRepository.createAndUpdate(flower);
+            flowerRepository.createOrUpdate(flower);
         }
 
         Customer jonas = Customer.builder()
                 .fullName("Jonas Jonaitis")
                 .email("jonas@org.com")
                 .phoneNumber("223658")
-                .billingAddress("Address 1")
                 .build();
 
         FlowersOrder jonasOrder1 = FlowersOrder.builder()
@@ -77,6 +76,6 @@ public class PrimaryData {
 
         jonasOrder2.setOrderedEntries(List.of(jonasFlowers3));
 
-        customerRepository.createAndUpdate(jonas);
+        customerRepository.createOrUpdate(jonas);
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CRUD<T> {
 
-    void createAndUpdate(T recordToCreateOrUpdate);
+    void createOrUpdate(T recordToCreateOrUpdate);
 
     List<T> findAll();
 

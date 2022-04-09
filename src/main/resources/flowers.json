@@ -52,14 +52,14 @@
     "flowerId": null,
     "name": "Roses",
     "price": 5.0,
-    "color": "Blue",
+    "color": "White",
     "amount": 22
   },
   {
     "flowerId": null,
     "name": "Roses",
     "price": 6.09,
-    "color": "Red",
+    "color": "Pink",
     "amount": 25
   },
   {
@@ -113,13 +113,6 @@
   },
   {
     "flowerId": null,
-    "name": "Roses",
-    "price": 4.11,
-    "color": "Puce",
-    "amount": 49
-  },
-  {
-    "flowerId": null,
     "name": "Daffodil",
     "price": 1.69,
     "color": "Pink",
@@ -128,8 +121,8 @@
   {
     "flowerId": null,
     "name": "Zinnia",
-    "price": 9.01,
-    "color": "Turquoise",
+    "price": 3.01,
+    "color": "Blue",
     "amount": 43
   },
   {

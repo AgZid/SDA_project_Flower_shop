@@ -8,9 +8,12 @@ import com.repository.CustomerRepository;
 import com.repository.FlowerRepository;
 import com.repository.FlowersOrderRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class UserMenu {
@@ -20,7 +23,7 @@ public class UserMenu {
     MenuCheckingService checkingService = new MenuCheckingService();
     FlowerRepository flowerRepository = new FlowerRepository();
     CustomerRepository customerRepository = new CustomerRepository();
-    FlowersOrderRepository flowersOrderRepository = new FlowersOrderRepository();
+    FlowersOrderRepository orderRepository = new FlowersOrderRepository();
     FlowerOrderingServices orderingServices = new FlowerOrderingServices();
 
     Customer customer;
@@ -45,23 +48,6 @@ public class UserMenu {
         showCustomerMenu();
     }
 
-    public void createNewCustomer(String fullName) {
-        System.out.println("Enter email:");
-        String email = scanner.nextLine();
-        checkingService.checkEmail(email);
-
-        System.out.println("Enter phone number:");
-        String phoneNumber = scanner.nextLine();
-
-        System.out.println("Enter billing address:");
-        String billingAddress = scanner.nextLine();
-
-        customer = new Customer
-                (null, fullName, email, phoneNumber, billingAddress, null);
-
-        customerRepository.createAndUpdate(customer);
-    }
-
     public void showCustomerMenu() {
 
         String customerSelection = "1";
@@ -74,7 +60,6 @@ public class UserMenu {
             System.out.println("2 - Show my flower orders");
             System.out.println("3 - Make new order");
             System.out.println("4 - Cancel order");
-            System.out.println("5 - Edit contact information");
             System.out.println("0 - Exit");
 
             customerSelection = scanner.nextLine();
@@ -92,21 +77,39 @@ public class UserMenu {
                 case "4":
                     cancelOrder();
                     break;
-                case "5":
-//                editCustomer();
-                    break;
                 default:
-                    System.out.println("Bey");
+                    System.out.println("We look forward to seeing you again!");
                     break;
             }
-
 
         }
     }
 
+    public void createNewCustomer(String fullName) {
+        System.out.println("Enter email:");
+        boolean isEmailCorrect = false;
+        String email = null;
+
+        while (!isEmailCorrect) {
+            email = scanner.nextLine();
+            isEmailCorrect = checkingService.checkEmail(email);
+        }
+
+        System.out.println("Enter phone number:");
+        String phoneNumber = scanner.nextLine();
+
+        customer = new Customer
+                (null, fullName, email, phoneNumber, null);
+
+        customerRepository.createOrUpdate(customer);
+    }
+
     public void makeNewOrder() {
         System.out.println("Enter delivery date (yyyy-mm-dd)");
-        String deliveryDate = scanner.nextLine();
+        String deliveryDateInput = scanner.nextLine();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate deliveryDate =  LocalDate.parse(deliveryDateInput, formatter);
+
 
         System.out.println("Enter delivery address:");
         String deliveryAddress = scanner.nextLine();
@@ -119,12 +122,14 @@ public class UserMenu {
             System.out.println("Select flower ID from the list below:");
             showAllFlowers();
             System.out.println();
+
             Integer flowerId = Integer.parseInt(scanner.nextLine());
 
             System.out.println("Enter quantity:");
             Integer flowerQuantity = Integer.parseInt(scanner.nextLine());
 
-            OrderedEntry orderedEntry = new OrderedEntry(null, flowerQuantity, flowerRepository.findById(flowerId), null);
+            OrderedEntry orderedEntry =
+                    new OrderedEntry(null, flowerQuantity, flowerRepository.findById(flowerId), null);
 
             orderingServices.reduceFlowerAmount(orderedEntry);
 
@@ -134,26 +139,14 @@ public class UserMenu {
             userSelection = scanner.nextLine();
         }
 
-        addFlowerOrder(deliveryAddress, orderedEntries);
+        FlowersOrder newOrder = new FlowersOrder(null, LocalDateTime.now(), deliveryDate, deliveryAddress, OrderStatus.ORDERED, orderedEntries, customer);
+        addFlowerOrder(newOrder);
     }
 
-    private void addFlowerOrder(String deliveryAddress, List<OrderedEntry> orderedEntries) {
+    private void addFlowerOrder( FlowersOrder flowersOrder) {
 
-        FlowersOrder flowersOrder = new FlowersOrder(null, LocalDateTime.now(), null, deliveryAddress,
-                OrderStatus.ORDERED, orderedEntries, customer);
-
-        orderedEntries.forEach(orderedEntry -> orderedEntry.setFlowersOrder(flowersOrder));
-
-        if (customer.getOrders() != null) {
-
-            List<FlowersOrder> orders = customer.getOrders();
-            orders.add(flowersOrder);
-            customer.setOrders(orders);
-        } else {
-            customer.setOrders(List.of(flowersOrder));
-        }
-
-        customerRepository.createAndUpdate(customer);
+        flowersOrder.getOrderedEntries().forEach(orderedEntry -> orderedEntry.setFlowersOrder(flowersOrder));
+        orderRepository.createOrUpdate(flowersOrder);
     }
 
     public void cancelOrder() {
@@ -162,22 +155,27 @@ public class UserMenu {
         if (orders.size() > 0) {
             Integer orderId;
 
-            if (orders.size() > 1) {
-                System.out.println();
-
-                orders.stream().filter(order -> order.getOrderStatus() == OrderStatus.ORDERED)
-                        .forEach(System.out::println);
-
-                System.out.println("Enter flower order Id:");
-                orderId = Integer.parseInt(scanner.nextLine());
-            } else {
-                orderId = orders.stream().findFirst().orElse(null).getId();
-            }
+            orderId = getOrderToBeUpdatedId(orders);
 
             orderingServices.cancelOrder(orderId);
         } else System.out.println("List of orders is empty");
     }
 
+    private Integer getOrderToBeUpdatedId(List<FlowersOrder> orders) {
+        Integer orderId;
+        if (orders.size() > 1) {
+            System.out.println();
+
+            orders.stream().filter(order -> order.getOrderStatus() == OrderStatus.ORDERED)
+                    .forEach(System.out::println);
+
+            System.out.println("Enter flower order Id:");
+            orderId = Integer.parseInt(scanner.nextLine());
+        } else {
+            orderId = Objects.requireNonNull(orders.stream().findFirst().orElse(null)).getId();
+        }
+        return orderId;
+    }
 
     public void showAllFlowers() {
         flowerRepository.findAll().forEach(System.out::println);
@@ -185,10 +183,9 @@ public class UserMenu {
 
     public void showCustomerOrders() {
         try {
-            customer.getOrders().forEach(System.out::println);
-        } catch( NullPointerException e)
-    {
-        System.out.println("No orders in a list.");
+            System.out.println(orderRepository.findBYForeignKey("customer", customer.getId()));
+        } catch (NullPointerException e) {
+            System.out.println("No orders in a list.");
+        }
     }
-}
 }

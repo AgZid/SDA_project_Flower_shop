@@ -9,9 +9,6 @@ import com.repository.FlowersOrderRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor
 public class FlowerOrderingServices {
@@ -22,13 +19,13 @@ public class FlowerOrderingServices {
     public void reduceFlowerAmount(OrderedEntry orderedEntry) {
         Flower flowerToReduceAmount = flowerRepository.findById(orderedEntry.getFlower().getId());
         flowerToReduceAmount.setAmount(flowerToReduceAmount.getAmount() - orderedEntry.getQuantity());
-        flowerRepository.createAndUpdate(flowerToReduceAmount);
+        flowerRepository.createOrUpdate(flowerToReduceAmount);
     }
 
     public void restoreFlowerAmount(OrderedEntry orderedEntry) {
         Flower flowerToRestoreAmount = flowerRepository.findById(orderedEntry.getFlower().getId());
         flowerToRestoreAmount.setAmount(flowerToRestoreAmount.getAmount() + orderedEntry.getQuantity());
-        flowerRepository.createAndUpdate(flowerToRestoreAmount);
+        flowerRepository.createOrUpdate(flowerToRestoreAmount);
     }
 
     public void cancelOrder(Integer orderId) {
@@ -36,10 +33,19 @@ public class FlowerOrderingServices {
         flowersOrder.getOrderedEntries().stream().forEach(orderedEntry -> restoreFlowerAmount(orderedEntry));
 
         flowersOrder.setOrderStatus(OrderStatus.CANCELED);
-        orderRepository.createAndUpdate(flowersOrder);
+        orderRepository.createOrUpdate(flowersOrder);
     }
 
-    public void changeOrderEntity (Integer orderId) {
+//    public void removeOrder(Integer orderId) {
+//        FlowersOrder flowersOrder = orderRepository.findById(orderId);
+//
+////        flowersOrder.getCustomer().getOrders().remove(flowersOrder);
+//
+//        if (flowersOrder.getOrderStatus() == OrderStatus.ORDERED) {
+//            flowersOrder.getOrderedEntries().stream()
+//                    .forEach(orderedEntry -> restoreFlowerAmount(orderedEntry));
+//        }
+//        orderRepository.deleteRecord(flowersOrder);
+//    }
 
-    }
 }

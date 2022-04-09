@@ -34,9 +34,9 @@ class FlowerRepositoryTest {
                 .amount(20)
                 .build();
 
-        FLOWER_REPOSITORY.createAndUpdate(roze);
-        FLOWER_REPOSITORY.createAndUpdate(tulpe);
-        FLOWER_REPOSITORY.createAndUpdate(gvazdikas);
+        FLOWER_REPOSITORY.createOrUpdate(roze);
+        FLOWER_REPOSITORY.createOrUpdate(tulpe);
+        FLOWER_REPOSITORY.createOrUpdate(gvazdikas);
     }
 
     @AfterEach
@@ -52,7 +52,7 @@ class FlowerRepositoryTest {
                 .color("TestPurple")
                 .amount(60)
                 .build();
-        FLOWER_REPOSITORY.createAndUpdate(bijunas);
+        FLOWER_REPOSITORY.createOrUpdate(bijunas);
 
         assertThat(FLOWER_REPOSITORY.findAll().size()).isEqualTo(4);
         assertThat(FLOWER_REPOSITORY.findByName("TestBijunas")).isNotNull();
@@ -64,7 +64,7 @@ class FlowerRepositoryTest {
         Flower gele = FLOWER_REPOSITORY.findByName("TestTulpe");
 
         gele.setPrice(newPrice);
-        FLOWER_REPOSITORY.createAndUpdate(gele);
+        FLOWER_REPOSITORY.createOrUpdate(gele);
 
         Flower updatedGele = FLOWER_REPOSITORY
                 .findByName("TestTulpe");
