@@ -22,6 +22,7 @@ class FlowersOrderRepositoryTest {
 
     @BeforeEach
     public void SetUpFlowers() {
+
         Flower roze = Flower.builder()
                 .name("TestRoze")
                 .price(5.5)
@@ -113,7 +114,8 @@ class FlowersOrderRepositoryTest {
         FlowersOrder testFlowerOrder = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
         OrderedEntry testOrderEntity = testFlowerOrder.getOrderedEntries().stream().findFirst().orElse(null);
         Integer testForeignKeyId = testOrderEntity.getId();
-        List<FlowersOrder> orderedFlowersQuantities = flowersOrderRepository.findBYForeignKey("orderedFlowersQuantities", testForeignKeyId);
+        List<FlowersOrder> orderedFlowersQuantities =
+                flowersOrderRepository.findBYForeignKey("orderedEntries", testForeignKeyId);
         assertThat(orderedFlowersQuantities).contains(testFlowerOrder);
 
     }
@@ -129,9 +131,9 @@ class FlowersOrderRepositoryTest {
 
     @Test
     void deleteRecord() {
-        FlowersOrder flowersOrders = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
-        flowersOrderRepository.deleteRecord(flowersOrders);
+        FlowersOrder flowersOrder = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
+        flowersOrderRepository.deleteRecord(flowersOrder);
 
-        assertThat(flowersOrderRepository.findAll().size()).isEqualTo(0);
+        assertThat(flowersOrderRepository.findAll().size()).isEqualTo(1);
     }
 }
