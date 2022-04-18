@@ -49,11 +49,7 @@ public class MenuService {
         return matcher.matches();
     }
 
-    public boolean isUserFlowerShopCustomer(String userName) {
-        CustomerRepository customerRepository = new CustomerRepository();
-        Customer byFullName = customerRepository.findByFullName(userName);
-        return byFullName != null;
-    }
+
 
     public Double convertFlowerPriceValueToDouble(String price) {
         Double flowerPrice = 0.0;

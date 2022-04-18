@@ -1,5 +1,6 @@
 package com.service;
 
+import com.model.Customer;
 import com.model.Flower;
 import com.repository.CustomerRepository;
 import com.repository.FlowerRepository;
@@ -37,12 +38,32 @@ public class FlowersServices {
     }
 
     public void showAllCustomers() {
+        customerRepository.findAll().forEach(System.out::println);
     }
 
-    public void addNewCustomer() {
+    public void addNewCustomer(Customer newCustomer) {
+        Customer customerInClientList = customerRepository.findByFullName(newCustomer.getFullName());
+        if (customerInClientList == null) {
+            customerRepository.createOrUpdate(newCustomer);
+        } else {
+            System.out.println("Customer already in Customers list:");
+            System.out.println(customerInClientList);
+        }
     }
 
-    public void removeCustomerByName() {
+    public void removeCustomerByName(String customerFullName) {
+        Customer foundCustomerByName = findCustomerByName(customerFullName);
+        if ( foundCustomerByName != null) {
+            customerRepository.deleteRecord(foundCustomerByName);
+        }
+    }
+
+    public Customer findCustomerByName(String customerFullName) {
+        Customer foundCustomerByName = customerRepository.findByFullName(customerFullName);
+        if (foundCustomerByName == null) {
+            System.out.println("Customer was not found");
+        }
+        return foundCustomerByName;
     }
 
     public void showCustomerOrders() {

@@ -1,14 +1,8 @@
 package com.service;
 
-import com.enumerators.OrderStatus;
 import com.model.Customer;
 import com.model.Flower;
-import com.model.FlowersOrder;
-import com.model.OrderedEntry;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class UserMenu {
@@ -54,20 +48,20 @@ public class UserMenu {
                     break;
                 case "3":
                     flowersServices.showAllFlowers();
-                    flowersServices.removeFlower(recieveFlowerId());
+                    flowersServices.removeFlower(receiveFlowerId());
                     break;
                 case "4":
                     flowersServices.showAllFlowers();
                     updateFlowerAmount();
                     break;
                 case "5":
-//                    flowersServices.showAllCustomers();
+                    flowersServices.showAllCustomers();
                     break;
                 case "6":
-//                    flowersServices.addNewCustomer();
+                    flowersServices.addNewCustomer(enterCustomerFields());
                     break;
                 case "7":
-//                    flowersServices.removeCustomerByNmae();
+                    flowersServices.removeCustomerByName(enterCustomerName());
                     break;
                 case "8":
 //                    flowersServices.showCustomerOrders();
@@ -85,7 +79,7 @@ public class UserMenu {
         }
     }
 
-    private Integer recieveFlowerId() {
+    private Integer receiveFlowerId() {
         System.out.println("Enter flower id");
         String flowerId = scanner.nextLine();
         return menuService.convertStringToInteger(flowerId, "flower ID");
@@ -121,43 +115,37 @@ public class UserMenu {
         String amount = scanner.nextLine();
         Integer newFlowerAmount = menuService.convertStringToInteger(amount, "flower amount");
 
-        flowersServices.updateFlowerAmount(recieveFlowerId(), newFlowerAmount);
+        flowersServices.updateFlowerAmount(receiveFlowerId(), newFlowerAmount);
     }
-//
-//
-//    public void registration() {
-//        System.out.println("Please register");
-//        System.out.println("Enter full name:");
-//        String customerFullName = scanner.nextLine();
-//
-//        if (!menuService.isUserFlowerShopCustomer(customerFullName)) {
-//            createNewCustomer(customerFullName);
-//        } else {
-//            customer = customerRepository.findByFullName(customerFullName);
-//        }
-//
-//        showCustomerMenu();
-//    }
-//
-//    public void createNewCustomer(String fullName) {
-//        System.out.println("Enter email:");
-//        boolean isEmailCorrect = false;
-//        String email = null;
-//
-//        while (!isEmailCorrect) {
-//            email = scanner.nextLine();
-//            isEmailCorrect = menuService.checkEmail(email);
-//        }
-//
-//        System.out.println("Enter phone number:");
-//        String phoneNumber = scanner.nextLine();
-//
-//        customer = new Customer
-//                (null, fullName, email, phoneNumber, null);
-//
-//        customerRepository.createOrUpdate(customer);
-//    }
-//
+
+    public Customer enterCustomerFields() {
+        System.out.println("Enter full name:");
+        String fullName = scanner.nextLine();
+
+        System.out.println("Enter email:");
+        String email = scanner.nextLine();
+        while (!menuService.checkEmail(email)) {
+            System.out.println("Incorrect email address, enter correct email:");
+            email = scanner.nextLine();
+        }
+
+        System.out.println("Enter phone number:");
+        String phoneNumber = scanner.nextLine();
+
+        return Customer.builder()
+                .fullName(fullName)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .build();
+    }
+
+    private String enterCustomerName() {
+        System.out.println("Enter full name:");
+        return scanner.nextLine();
+    }
+
+
+
 //    public void makeNewOrder() {
 //        System.out.println("Enter delivery date (yyyy-mm-dd)");
 //        String deliveryDateInput = scanner.nextLine();
