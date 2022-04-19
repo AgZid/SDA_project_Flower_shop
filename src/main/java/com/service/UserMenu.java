@@ -15,6 +15,7 @@ public class UserMenu {
 
     Scanner scanner = new Scanner(System.in);
     FlowersServices flowersServices = new FlowersServices();
+    CustomersAndFlowersOrderingServices orderingServices = new CustomersAndFlowersOrderingServices();
 
     HashMap<String, String> menuOptions;
     MenuService menuService = new MenuService();
@@ -59,23 +60,23 @@ public class UserMenu {
                     updateFlowerAmount();
                     break;
                 case "5":
-                    flowersServices.showAllCustomers();
+                    orderingServices.showAllCustomers();
                     break;
                 case "6":
-                    flowersServices.addNewCustomer(enterCustomerFields());
+                    orderingServices.addNewCustomer(enterCustomerFields());
                     break;
                 case "7":
-                    flowersServices.removeCustomerByName(enterCustomerName());
+                    orderingServices.removeCustomerByName(enterCustomerName());
                     break;
                 case "8":
-                    flowersServices.showCustomerOrders(enterCustomerName());
+                    orderingServices.showCustomerOrders(enterCustomerName());
                     break;
                 case "9":
-                    flowersServices.addNewOrder(enterCustomerName(), enterNewOrderFields());
+                    orderingServices.addNewOrder(enterCustomerName(), enterNewOrderFields());
                     break;
                 case "10":
-                    flowersServices.showCustomerOrders(enterCustomerName());
-                    flowersServices.cancelOrder(enterOrderId());
+                    orderingServices.showCustomerOrders(enterCustomerName());
+                    orderingServices.cancelOrder(enterOrderId());
                     break;
                 default:
                     System.out.println("We look forward to seeing you again!");
@@ -172,7 +173,7 @@ public class UserMenu {
             System.out.println("Enter quantity:");
             Integer flowersQuantity = Integer.parseInt(scanner.nextLine());
 
-            orderedEntries.add(flowersServices.createNewOrderEntry(flowersQuantity, flowerId));
+            orderedEntries.add(orderingServices.createNewOrderEntry(flowersQuantity, flowerId));
 
             System.out.println("Enter 0 - finish order, 1 - select more flowers");
             userSelection = scanner.nextLine();
