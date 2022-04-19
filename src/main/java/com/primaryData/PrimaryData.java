@@ -12,6 +12,8 @@ import com.repository.FlowersOrderRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.primaryData.FromFileToObject.extractFromJsonFile;
@@ -50,7 +52,7 @@ public class PrimaryData {
                 .orderStatus(OrderStatus.CANCELED)
                 .build();
 
-        jonas.setOrders(List.of(jonasOrder1, jonasOrder2));
+        jonas.setOrders(Arrays.asList(jonasOrder1, jonasOrder2));
 
         OrderedEntry jonasFlowers1 = OrderedEntry.builder()
                 .flowersOrder(jonasOrder1)
@@ -66,7 +68,7 @@ public class PrimaryData {
                 .quantity(5)
                 .build();
 
-        jonasOrder1.setOrderedEntries(List.of(jonasFlowers1, jonasFlowers2));
+        jonasOrder1.setOrderedEntries(Arrays.asList(jonasFlowers1, jonasFlowers2));
 
         OrderedEntry jonasFlowers3 = OrderedEntry.builder()
                 .flowersOrder(jonasOrder2)
@@ -74,7 +76,7 @@ public class PrimaryData {
                 .quantity(5)
                 .build();
 
-        jonasOrder2.setOrderedEntries(List.of(jonasFlowers3));
+        jonasOrder2.setOrderedEntries(Arrays.asList(jonasFlowers3));
 
         customerRepository.createOrUpdate(jonas);
     }

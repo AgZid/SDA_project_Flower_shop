@@ -115,7 +115,7 @@ class FlowersOrderRepositoryTest {
         OrderedEntry testOrderEntity = testFlowerOrder.getOrderedEntries().stream().findFirst().orElse(null);
         Integer testForeignKeyId = testOrderEntity.getId();
         List<FlowersOrder> orderedFlowersQuantities =
-                flowersOrderRepository.findBYForeignKey("orderedEntries", testForeignKeyId);
+                flowersOrderRepository.findByForeignKey("orderedEntries", testForeignKeyId);
         assertThat(orderedFlowersQuantities).contains(testFlowerOrder);
 
     }

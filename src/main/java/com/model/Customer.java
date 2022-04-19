@@ -24,6 +24,17 @@ public class Customer {
     private String email;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<FlowersOrder> orders;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FlowersOrder> orders = new ArrayList<>();
+//    public List<FlowersOrder> getOrders() { return orders;}
+//    public void setOrders(List<FlowersOrder> orders) {this.orders = orders;}
+
+    public void addOrder(FlowersOrder order) {
+        if (orders == null) {
+            orders = new ArrayList<>();
+        }
+
+        orders.add(order);
+    }
+
 }

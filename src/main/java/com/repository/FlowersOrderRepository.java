@@ -9,7 +9,7 @@ public class FlowersOrderRepository extends Repository<FlowersOrder>{
         super(FlowersOrder.class);
     }
 
-    public List<FlowersOrder> findBYForeignKey(String foreignKeyFieldName, Integer id) {
+    public List<FlowersOrder> findByForeignKey(String foreignKeyFieldName, Integer id) {
         String query = String.format(SQLQueries.SELECT_BY_FOREIGN_KEY, "FlowersOrder", foreignKeyFieldName);
         System.out.println("Query: " + query);
         return session.createQuery(query, FlowersOrder.class)

@@ -27,12 +27,4 @@ public class OrderedEntry {
     @JoinColumn(name = "flowersOrderId")
     private FlowersOrder flowersOrder;
 
-    @Override
-    public String toString() {
-        return "OrderedEntry{" +
-                "id=" + id +
-                ", quantity=" + quantity +
-                ", flower=" + flower.getName() + " " + flower.getColor() +
-                '}';
-    }
 }
