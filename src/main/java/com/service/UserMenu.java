@@ -63,7 +63,7 @@ public class UserMenu {
                     orderingServices.showAllCustomers();
                     break;
                 case "6":
-                    orderingServices.addNewCustomer(enterCustomerFields());
+                    orderingServices.addNewCustomer(enterCustomerInformation());
                     break;
                 case "7":
                     orderingServices.removeCustomerByName(enterCustomerName());
@@ -72,7 +72,7 @@ public class UserMenu {
                     orderingServices.showCustomerOrders(enterCustomerName());
                     break;
                 case "9":
-                    orderingServices.addNewOrder(enterCustomerName(), enterNewOrderFields());
+                    orderingServices.addNewOrder(enterCustomerName(), enterNewOrderInformation());
                     break;
                 case "10":
                     orderingServices.showCustomerOrders(enterCustomerName());
@@ -101,7 +101,7 @@ public class UserMenu {
         System.out.println("Enter flower price:");
         String price = scanner.nextLine();
 
-        Double flowerPrice = menuService.convertFlowerPriceValueToDouble(price);
+        Double flowerPrice = menuService.convertStringToDouble(price, "flower price");
         System.out.println("Enter flowers amount:");
 
         String amount = scanner.nextLine();
@@ -124,7 +124,7 @@ public class UserMenu {
         flowersServices.updateFlowerAmount(receiveFlowerId(), newFlowerAmount);
     }
 
-    public Customer enterCustomerFields() {
+    public Customer enterCustomerInformation() {
         System.out.println("Enter full name:");
         String fullName = scanner.nextLine();
 
@@ -137,6 +137,10 @@ public class UserMenu {
 
         System.out.println("Enter phone number:");
         String phoneNumber = scanner.nextLine();
+        while (!menuService.checkPhoneNumber(phoneNumber)) {
+            System.out.println("Incorrect phone number, enter correct number:");
+            phoneNumber = scanner.nextLine();
+        }
 
         return Customer.builder()
                 .fullName(fullName)
@@ -150,7 +154,7 @@ public class UserMenu {
         return scanner.nextLine();
     }
 
-    public FlowersOrder enterNewOrderFields() {
+    public FlowersOrder enterNewOrderInformation() {
         System.out.println("Enter delivery date (yyyy-mm-dd)");
         String deliveryDateInput = scanner.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -164,14 +168,8 @@ public class UserMenu {
         List<OrderedEntry> orderedEntries = new ArrayList<>();
         while (userSelection.equals("1")) {
 
-            System.out.println("Select flower ID from the list below:");
-            flowersServices.showAllFlowers();
-            System.out.println();
-
-            Integer flowerId = Integer.parseInt(scanner.nextLine());
-
-            System.out.println("Enter quantity:");
-            Integer flowersQuantity = Integer.parseInt(scanner.nextLine());
+            Integer flowerId = enterFlowerId();
+            Integer flowersQuantity = enterFlowersQuantity(flowerId);
 
             orderedEntries.add(orderingServices.createNewOrderEntry(flowersQuantity, flowerId));
 
@@ -188,8 +186,36 @@ public class UserMenu {
                 .build();
     }
 
+    private Integer enterFlowersQuantity(Integer flowerId) {
+        System.out.println("Enter quantity:");
+        Integer flowersQuantity = Integer.parseInt(scanner.nextLine());
+        while (!flowersServices.isFlowersQuantityAppropriate(flowerId, flowersQuantity)) {
+            System.out.println("Enter quantity:");
+            flowersQuantity = Integer.parseInt(scanner.nextLine());
+        }
+        return flowersQuantity;
+    }
+
+    private Integer enterFlowerId() {
+        System.out.println("Select flower ID from the list below:");
+        flowersServices.showAllFlowers();
+        System.out.println();
+
+        Integer flowerId = Integer.parseInt(scanner.nextLine());
+        while (!flowersServices.isValidFlowerId(flowerId)) {
+            System.out.println("Incorrect flower ID, enter ID:");
+            flowerId = Integer.parseInt(scanner.nextLine());
+        }
+        return flowerId;
+    }
+
     public Integer enterOrderId() {
         System.out.println("Enter Order Id:");
-        return  menuService.convertStringToInteger(scanner.nextLine(), "Order Id");
+        Integer orderId = menuService.convertStringToInteger(scanner.nextLine(), "Order Id");
+        while (!orderingServices.isValidOrderId(orderId)) {
+            System.out.println("Incorrect Order ID, enter correct ID:");
+            orderId = menuService.convertStringToInteger(scanner.nextLine(), "Order Id");
+        }
+        return orderId;
     }
 }

@@ -2,18 +2,27 @@ package com.service;
 
 import com.model.Flower;
 import com.model.OrderedEntry;
-import com.repository.CustomerRepository;
 import com.repository.FlowerRepository;
-import com.repository.FlowersOrderRepository;
 
 public class FlowersServices {
 
     FlowerRepository flowerRepository = new FlowerRepository();
-    CustomerRepository customerRepository = new CustomerRepository();
-    FlowersOrderRepository orderRepository = new FlowersOrderRepository();
 
-    public void showAllFlowers() {
-        flowerRepository.findAll().forEach(System.out::println);
+    public void showAllFlowers() {flowerRepository.findAll().forEach(System.out::println);
+    }
+
+    public boolean isValidFlowerId(Integer flowerId) {
+        return flowerRepository.findById(flowerId) != null;
+    }
+
+    public boolean isFlowersQuantityAppropriate(Integer flowerId, Integer quantity) {
+        Integer flowersAmountInStock = flowerRepository.findById(flowerId).getAmount();
+        if (flowersAmountInStock >= quantity && quantity > 0) {
+            return true;
+        } else {
+            System.out.println("Quantity must be greater then 0 and less then " + flowersAmountInStock);
+            return false;
+        }
     }
 
     public void addNewFlower(Flower newFlower) {

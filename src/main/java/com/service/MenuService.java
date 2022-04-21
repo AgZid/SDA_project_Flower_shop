@@ -40,9 +40,9 @@ public class MenuService {
     }
 
     public boolean checkEmail(String email) {
-        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
 
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(emailRegex);
 
         Matcher matcher = pattern.matcher(email);
         System.out.println(email + " : " + matcher.matches());
@@ -50,23 +50,32 @@ public class MenuService {
     }
 
 
+    public boolean checkPhoneNumber(String phoneNumber) {
+        String phoneNumberRegex = "//^[+0-9 ()-]*$/ui";
 
-    public Double convertFlowerPriceValueToDouble(String price) {
+        Pattern pattern = Pattern.compile(phoneNumberRegex);
+
+        Matcher matcher = pattern.matcher(phoneNumber);
+        System.out.println(phoneNumber + " : " + matcher.matches());
+        return matcher.matches();
+    }
+
+    public Double convertStringToDouble(String price, String elementName) {
         Double flowerPrice = 0.0;
         try {
             flowerPrice =  Double.parseDouble(price);
         } catch (NumberFormatException e) {
-            System.out.println("Incorrect price value provided:" + e.getMessage());
+            System.out.println("Incorrect price value provided " + elementName + ": " + e.getMessage());
         }
          return flowerPrice;
     }
 
-    public Integer convertStringToInteger(String stringValue, String enteredElement) {
+    public Integer convertStringToInteger(String stringValue, String elementName) {
         Integer integerValue = 0;
         try {
             integerValue = Integer.parseInt(stringValue);
         } catch (NumberFormatException e) {
-            System.out.println("Incorrect value provided " + enteredElement + ": " + e.getMessage());
+            System.out.println("Incorrect value provided " + elementName + ": " + e.getMessage());
         }
         return integerValue;
     }

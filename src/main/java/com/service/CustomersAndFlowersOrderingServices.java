@@ -59,6 +59,10 @@ public class CustomersAndFlowersOrderingServices {
         retrieveCustomerOrders(customerFullName).forEach(System.out::println);
     }
 
+    public boolean isValidOrderId(Integer orderId) {
+        return orderRepository.findById(orderId) != null;
+    }
+
     public void addNewOrder(String customerFullName, FlowersOrder newOrder) {
         Customer customer = findCustomerByName(customerFullName);
         newOrder.setCustomer(customer);
