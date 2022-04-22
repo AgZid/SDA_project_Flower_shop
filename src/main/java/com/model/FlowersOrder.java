@@ -23,6 +23,7 @@ public class FlowersOrder {
     private LocalDateTime orderDate;
     private LocalDate deliveryDay;
     private String deliveryAddress;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 

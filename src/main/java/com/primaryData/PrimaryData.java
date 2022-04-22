@@ -12,6 +12,7 @@ import com.service.customExceptions.IncorrectArgument;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +25,8 @@ public class PrimaryData {
         com.repository.FlowerRepository flowerRepository = new FlowerRepository();
         com.repository.CustomerRepository customerRepository = new CustomerRepository();
 
-        List<Flower> flowers = extractFromJsonFile("src/main/resources/flowers.json", new TypeToken<>(){});
+        List<Flower> flowers = extractFromJsonFile("src/main/resources/flowers.json", new TypeToken<>() {
+        });
 
         for (Flower flower : flowers) {
             flowerRepository.createOrUpdate(flower);
@@ -50,7 +52,10 @@ public class PrimaryData {
                 .orderStatus(OrderStatus.CANCELED)
                 .build();
 
-        jonas.setOrders(Arrays.asList(jonasOrder1, jonasOrder2));
+        List<FlowersOrder> jonasOrders = new ArrayList<>();
+        jonasOrders.add(jonasOrder1);
+        jonasOrders.add(jonasOrder2);
+        jonas.setOrders(jonasOrders);
 
         OrderedEntry jonasFlowers1 = OrderedEntry.builder()
                 .flowersOrder(jonasOrder1)

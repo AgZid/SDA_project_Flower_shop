@@ -49,6 +49,7 @@ public class UserMenu {
                 manageMenuSelection(userSelection);
             } catch (RuntimeException e) {
                 System.out.println("Error. " + e.getLocalizedMessage());
+                e.printStackTrace();
             }
         }
     }

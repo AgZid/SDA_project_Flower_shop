@@ -11,7 +11,7 @@ import com.service.customExceptions.IncorrectArgument;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -47,15 +47,17 @@ public class CustomersAndFlowersOrderingServices {
     public Customer findCustomerByName(String customerFullName) {
         Customer foundCustomerByName = customerRepository.findByFullName(customerFullName);
         if (foundCustomerByName == null) {
-            {throw new IncorrectArgument("No customer " + customerFullName + ". Incorrect name was entered.");}
+            {
+                throw new IncorrectArgument("No customer " + customerFullName + ". Incorrect name was entered.");
+            }
         }
         return foundCustomerByName;
     }
 
     public List<FlowersOrder> retrieveCustomerOrders(String customerFullName) throws IncorrectArgument {
         Customer customer = findCustomerByName(customerFullName);
-        if (customer == null) {
-            throw new IncorrectArgument("Value was not passed. Record was not saved.");
+        if (customer.getOrders() == null) {
+            throw new IncorrectArgument("Customer have no orders.");
         }
         return orderRepository.findByForeignKey("customer", customer.getId());
     }
@@ -65,6 +67,7 @@ public class CustomersAndFlowersOrderingServices {
     }
 
     public boolean isValidOrderId(Integer orderId) {
+        System.out.println("Invalid id");
         return orderRepository.findById(orderId) != null;
     }
 
@@ -75,11 +78,12 @@ public class CustomersAndFlowersOrderingServices {
         orderedEntries.forEach(orderedEntry -> orderedEntry.setFlowersOrder(newOrder));
 
         if (customer.getOrders() == null) {
-            customer.setOrders(Arrays.asList(newOrder));
+            List<FlowersOrder> flowersOrders = new ArrayList<>();
+            flowersOrders.add(newOrder);
+            customer.setOrders(flowersOrders);
         } else {
             List<FlowersOrder> flowersOrders = customer.getOrders();
             flowersOrders.add(newOrder);
-            customer.setOrders(flowersOrders);
         }
 
         customerRepository.createOrUpdate(customer);
@@ -87,6 +91,13 @@ public class CustomersAndFlowersOrderingServices {
 
     public void cancelOrder(Integer orderId) throws IncorrectArgument {
         FlowersOrder flowersOrder = orderRepository.findById(orderId);
+
+        if (flowersOrder.getOrderStatus().equals(OrderStatus.CANCELED)) {
+            {
+                throw new IncorrectArgument("Order is already cancelled");
+            }
+        }
+
         flowersOrder.getOrderedEntries().forEach(orderedEntry -> {
             try {
                 flowersServices.restoreFlowerAmount(orderedEntry);
