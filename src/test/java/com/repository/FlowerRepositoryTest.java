@@ -74,12 +74,12 @@ class FlowerRepositoryTest {
     }
 
     @Test
-    void findAll() {
+    void testFindAll() {
         assertThat(FLOWER_REPOSITORY.findAll().size()).isEqualTo(3);
     }
 
     @Test
-    void findFlowerById() {
+    void testFindFlowerById() {
         Integer flowerId = FLOWER_REPOSITORY.findByName("TestTulpe").getId();
         String expectedName = "TestTulpe";
 
@@ -89,7 +89,7 @@ class FlowerRepositoryTest {
     }
 
     @Test
-    void findFlowerByName() {
+    void testFindFlowerByName() {
         Flower testFlower = FLOWER_REPOSITORY.findAll().stream().findFirst().orElse(null);
 
         Integer testId = FLOWER_REPOSITORY.findByName(testFlower.getName()).getId();
@@ -98,7 +98,7 @@ class FlowerRepositoryTest {
     }
 
     @Test
-    void deleteRecord() {
+    void testDeleteRecord() {
         FLOWER_REPOSITORY.deleteRecord(FLOWER_REPOSITORY.findByName("TestGvazdikas"));
 
         assertThat(FLOWER_REPOSITORY.findAll().size()).isEqualTo(2);

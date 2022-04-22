@@ -76,10 +76,11 @@ class FlowersOrderRepositoryTest {
     @AfterEach
     public void deleteOrders() {
         flowersOrderRepository.findAll().forEach(flowersOrder -> flowersOrderRepository.deleteRecord(flowersOrder));
+        flowerRepository.deleteAll();
     }
 
     @Test
-    void createAndUpdate_create() throws IncorrectArgument {
+    void testCreateAndUpdate_create() throws IncorrectArgument {
         FlowersOrder testFlowerOrder = FlowersOrder.builder()
                 .orderDate(LocalDateTime.now())
                 .deliveryDay(LocalDate.of(2022, 4, 20))
@@ -98,12 +99,12 @@ class FlowersOrderRepositoryTest {
     }
 
     @Test
-    void findAll() {
+    void testFindAll() {
         assertThat(flowersOrderRepository.findAll().size()).isEqualTo(2);
     }
 
     @Test
-    void findById() {
+    void testFindById() {
         FlowersOrder testFlowersOrder = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
         Integer testFlowersOrderId = testFlowersOrder.getId();
 
@@ -111,7 +112,7 @@ class FlowersOrderRepositoryTest {
     }
 
     @Test
-    void findByForeignKey() {
+    void testFindByForeignKey() {
         FlowersOrder testFlowerOrder = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
         OrderedEntry testOrderEntity = testFlowerOrder.getOrderedEntries().stream().findFirst().orElse(null);
         Integer testForeignKeyId = testOrderEntity.getId();
@@ -122,7 +123,7 @@ class FlowersOrderRepositoryTest {
     }
 
     @Test
-    void createAndUpdate_update() {
+    void testCreateAndUpdate_update() {
         FlowersOrder testFlowersOrder = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
         testFlowersOrder.setOrderStatus(OrderStatus.CANCELED);
 
@@ -131,7 +132,7 @@ class FlowersOrderRepositoryTest {
     }
 
     @Test
-    void deleteRecord() {
+    void testDeleteRecord() {
         FlowersOrder flowersOrder = flowersOrderRepository.findAll().stream().findFirst().orElse(null);
         flowersOrderRepository.deleteRecord(flowersOrder);
 

@@ -37,7 +37,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void createAndUpdate_update() throws IncorrectArgument {
+    void testCreateAndUpdate_update() throws IncorrectArgument {
         Customer testCustomer = CUSTOMER_REPOSITORY.findByFullName("Tom Test");
         testCustomer.setEmail("New email address");
 
@@ -48,7 +48,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void createAndUpdate_create() throws IncorrectArgument {
+    void testCreateAndUpdate_create() throws IncorrectArgument {
         Customer testTest = Customer.builder()
                 .fullName("Test Test")
                 .phoneNumber("TestPhone")
@@ -61,19 +61,19 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void findAll() {
+    void testFindAll() {
         assertThat(CUSTOMER_REPOSITORY.findAll().size()).isEqualTo(2);
     }
 
     @Test
-    void findById() {
+    void testFindById() {
         Integer id = CUSTOMER_REPOSITORY.findByFullName("Tom Test").getId();
 
         assertThat(CUSTOMER_REPOSITORY.findById(id).getFullName()).isEqualTo("Tom Test");
     }
 
     @Test
-    void findByFullName() {
+    void testFindByFullName() {
         Customer customerTest = CUSTOMER_REPOSITORY.findAll().stream().findFirst().orElse(null);
         String customerTestName = customerTest.getFullName();
 
@@ -81,7 +81,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void deleteRecord() {
+    void testDeleteRecord() {
         CUSTOMER_REPOSITORY.deleteRecord(CUSTOMER_REPOSITORY.findByFullName("John Test"));
 
         assertThat(CUSTOMER_REPOSITORY.findAll().size()).isEqualTo(1);
@@ -89,7 +89,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void deleteAll() {
+    void testDeleteAll() {
         CUSTOMER_REPOSITORY.deleteAll();
 
         assertThat(CUSTOMER_REPOSITORY.findAll().size()).isEqualTo(0);

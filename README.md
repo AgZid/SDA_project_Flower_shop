@@ -5,7 +5,7 @@ This project made using JPA, frameWork Hibernate, JUnit5 test, Command line user
 
 Project covers knowledge of Software Testing, Java - Advanced, Design Patterns (Builder), Database (My SQL)
 
-Project basic architecture of flower shop database with CRUD methods
+Project represents architecture of flower shop database with CRUD methods
 
 
 
