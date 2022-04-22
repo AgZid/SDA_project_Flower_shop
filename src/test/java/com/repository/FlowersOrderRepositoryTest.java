@@ -4,6 +4,7 @@ import com.enumerators.OrderStatus;
 import com.model.Flower;
 import com.model.OrderedEntry;
 import com.model.FlowersOrder;
+import com.service.customExceptions.IncorrectArgument;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class FlowersOrderRepositoryTest {
     FlowerRepository flowerRepository = new FlowerRepository();
 
     @BeforeEach
-    public void SetUpFlowers() {
+    public void SetUpFlowers() throws IncorrectArgument {
 
         Flower roze = Flower.builder()
                 .name("TestRoze")
@@ -78,7 +79,7 @@ class FlowersOrderRepositoryTest {
     }
 
     @Test
-    void createAndUpdate_create() {
+    void createAndUpdate_create() throws IncorrectArgument {
         FlowersOrder testFlowerOrder = FlowersOrder.builder()
                 .orderDate(LocalDateTime.now())
                 .deliveryDay(LocalDate.of(2022, 4, 20))

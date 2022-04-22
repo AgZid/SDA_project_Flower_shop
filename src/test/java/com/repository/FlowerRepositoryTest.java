@@ -3,6 +3,7 @@ package com.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.model.Flower;
+import com.service.customExceptions.IncorrectArgument;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ class FlowerRepositoryTest {
     private static final FlowerRepository FLOWER_REPOSITORY = new FlowerRepository();
 
     @BeforeEach
-    public void SetUpFlowers() {
+    public void SetUpFlowers() throws IncorrectArgument {
         Flower roze = Flower.builder()
                 .name("TestRoze")
                 .price(5.5)
@@ -45,7 +46,7 @@ class FlowerRepositoryTest {
     }
 
     @Test
-    public void testCreateOrUpdateFlower_create() {
+    public void testCreateOrUpdateFlower_create() throws IncorrectArgument {
         Flower bijunas = Flower.builder()
                 .name("TestBijunas")
                 .price(4.0)
@@ -59,7 +60,7 @@ class FlowerRepositoryTest {
     }
 
     @Test
-    public void testCreateOrUpdateFlower_update() {
+    public void testCreateOrUpdateFlower_update() throws IncorrectArgument {
         Double newPrice = 30.0;
         Flower gele = FLOWER_REPOSITORY.findByName("TestTulpe");
 

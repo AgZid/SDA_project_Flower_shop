@@ -5,6 +5,7 @@ import com.model.Customer;
 import com.model.Flower;
 import com.model.FlowersOrder;
 import com.model.OrderedEntry;
+import com.service.customExceptions.IncorrectArgument;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class UserMenu {
     HashMap<String, String> menuOptions;
     MenuService menuService = new MenuService();
 
-    public void showWelcome() {
+    public void showWelcome() throws IncorrectArgument {
         System.out.println();
         System.out.println("Welcome to flower application");
         System.out.println();
@@ -28,7 +29,7 @@ public class UserMenu {
         manageMenu();
     }
 
-    public void manageMenu() {
+    public void manageMenu() throws IncorrectArgument {
         menuOptions = menuService.assignMenuOptionsToMap();
 
         String userSelection = "1";
@@ -44,44 +45,52 @@ public class UserMenu {
                 userSelection = scanner.nextLine();
             }
 
-            switch (userSelection) {
-                case "1":
-                    flowersServices.showAllFlowers();
-                    break;
-                case "2":
-                    flowersServices.addNewFlower(enterNewFlowerFields());
-                    break;
-                case "3":
-                    flowersServices.showAllFlowers();
-                    flowersServices.removeFlower(receiveFlowerId());
-                    break;
-                case "4":
-                    flowersServices.showAllFlowers();
-                    updateFlowerAmount();
-                    break;
-                case "5":
-                    orderingServices.showAllCustomers();
-                    break;
-                case "6":
-                    orderingServices.addNewCustomer(enterCustomerInformation());
-                    break;
-                case "7":
-                    orderingServices.removeCustomerByName(enterCustomerName());
-                    break;
-                case "8":
-                    orderingServices.showCustomerOrders(enterCustomerName());
-                    break;
-                case "9":
-                    orderingServices.addNewOrder(enterCustomerName(), enterNewOrderInformation());
-                    break;
-                case "10":
-                    orderingServices.showCustomerOrders(enterCustomerName());
-                    orderingServices.cancelOrder(enterOrderId());
-                    break;
-                default:
-                    System.out.println("We look forward to seeing you again!");
-                    break;
+            try {
+                manageMenuSelection(userSelection);
+            } catch (RuntimeException e) {
+                System.out.println("Error. " + e.getLocalizedMessage());
             }
+        }
+    }
+
+    private void manageMenuSelection(String userSelection) throws IncorrectArgument {
+        switch (userSelection) {
+            case "1":
+                flowersServices.showAllFlowers();
+                break;
+            case "2":
+                flowersServices.addNewFlower(enterNewFlowerFields());
+                break;
+            case "3":
+                flowersServices.showAllFlowers();
+                flowersServices.removeFlower(receiveFlowerId());
+                break;
+            case "4":
+                flowersServices.showAllFlowers();
+                updateFlowerAmount();
+                break;
+            case "5":
+                orderingServices.showAllCustomers();
+                break;
+            case "6":
+                orderingServices.addNewCustomer(enterCustomerInformation());
+                break;
+            case "7":
+                orderingServices.removeCustomerByName(enterCustomerName());
+                break;
+            case "8":
+                orderingServices.showCustomerOrders(enterCustomerName());
+                break;
+            case "9":
+                orderingServices.addNewOrder(enterCustomerName(), enterNewOrderInformation());
+                break;
+            case "10":
+                orderingServices.showCustomerOrders(enterCustomerName());
+                orderingServices.cancelOrder(enterOrderId());
+                break;
+            default:
+                System.out.println("We look forward to seeing you again!");
+                break;
         }
     }
 
@@ -115,7 +124,7 @@ public class UserMenu {
                 .build();
     }
 
-    public void updateFlowerAmount() {
+    public void updateFlowerAmount() throws IncorrectArgument {
         System.out.println("Enter flowers amount:");
 
         String amount = scanner.nextLine();
@@ -128,19 +137,8 @@ public class UserMenu {
         System.out.println("Enter full name:");
         String fullName = scanner.nextLine();
 
-        System.out.println("Enter email:");
-        String email = scanner.nextLine();
-        while (!menuService.checkEmail(email)) {
-            System.out.println("Incorrect email address, enter correct email:");
-            email = scanner.nextLine();
-        }
-
-        System.out.println("Enter phone number:");
-        String phoneNumber = scanner.nextLine();
-        while (!menuService.checkPhoneNumber(phoneNumber)) {
-            System.out.println("Incorrect phone number, enter correct number:");
-            phoneNumber = scanner.nextLine();
-        }
+        String email = enterCustomerEmail();
+        String phoneNumber = enterPhoneNumber();
 
         return Customer.builder()
                 .fullName(fullName)
@@ -149,12 +147,32 @@ public class UserMenu {
                 .build();
     }
 
+    private String enterPhoneNumber() {
+        System.out.println("Enter phone number:");
+        String phoneNumber = scanner.nextLine();
+        while (!menuService.checkPhoneNumber(phoneNumber)) {
+            System.out.println("Incorrect phone number, enter correct number:");
+            phoneNumber = scanner.nextLine();
+        }
+        return phoneNumber;
+    }
+
+    private String enterCustomerEmail() {
+        System.out.println("Enter email:");
+        String email = scanner.nextLine();
+        while (!menuService.checkEmail(email)) {
+            System.out.println("Incorrect email address, enter correct email:");
+            email = scanner.nextLine();
+        }
+        return email;
+    }
+
     private String enterCustomerName() {
         System.out.println("Enter full name:");
         return scanner.nextLine();
     }
 
-    public FlowersOrder enterNewOrderInformation() {
+    public FlowersOrder enterNewOrderInformation() throws IncorrectArgument {
         System.out.println("Enter delivery date (yyyy-mm-dd)");
         String deliveryDateInput = scanner.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

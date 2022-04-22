@@ -1,9 +1,5 @@
 package com.service;
 
-import com.model.Customer;
-import com.repository.CustomerRepository;
-import com.service.customExceptions.IncorrectInput;
-
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,23 +36,22 @@ public class MenuService {
     }
 
     public boolean checkEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        String emailRegex = "[A-Za-z0-9+_.-]+@([(a-z-A-z0-9-)]+.[(a-zA-z)]{2,3})";
 
         Pattern pattern = Pattern.compile(emailRegex);
 
         Matcher matcher = pattern.matcher(email);
-        System.out.println(email + " : " + matcher.matches());
+        System.out.println(email + ": " + matcher.matches());
         return matcher.matches();
     }
 
-
     public boolean checkPhoneNumber(String phoneNumber) {
-        String phoneNumberRegex = "//^[+0-9 ()-]*$/ui";
+        String phoneNumberRegex = "(86|\\+3706)\\d{7}";
 
         Pattern pattern = Pattern.compile(phoneNumberRegex);
 
         Matcher matcher = pattern.matcher(phoneNumber);
-        System.out.println(phoneNumber + " : " + matcher.matches());
+        System.out.println(phoneNumber + ": " + matcher.matches());
         return matcher.matches();
     }
 
@@ -79,5 +74,4 @@ public class MenuService {
         }
         return integerValue;
     }
-
 }

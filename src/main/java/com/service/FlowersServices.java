@@ -3,6 +3,7 @@ package com.service;
 import com.model.Flower;
 import com.model.OrderedEntry;
 import com.repository.FlowerRepository;
+import com.service.customExceptions.IncorrectArgument;
 
 public class FlowersServices {
 
@@ -12,7 +13,10 @@ public class FlowersServices {
     }
 
     public boolean isValidFlowerId(Integer flowerId) {
-        return flowerRepository.findById(flowerId) != null;
+        if (flowerRepository.findById(flowerId) != null) {
+            return true;
+        }
+        return  false;
     }
 
     public boolean isFlowersQuantityAppropriate(Integer flowerId, Integer quantity) {
@@ -25,7 +29,7 @@ public class FlowersServices {
         }
     }
 
-    public void addNewFlower(Flower newFlower) {
+    public void addNewFlower(Flower newFlower) throws IncorrectArgument {
         Flower flowerInStock = findFlowerInStock(newFlower);
         if (flowerInStock != null) {
             System.out.println("Flower is already in stock");
@@ -35,16 +39,21 @@ public class FlowersServices {
     }
 
     public void removeFlower(Integer flowerId) {
-        flowerRepository.deleteRecord(flowerRepository.findById(flowerId));
+            flowerRepository.deleteRecord(flowerRepository.findById(flowerId));
     }
 
-    public void updateFlowerAmount(Integer flowerId, Integer newFlowerAmount) {
-        Flower flowerToUpdate = flowerRepository.findById(flowerId);
-        flowerToUpdate.setAmount(newFlowerAmount);
-        flowerRepository.createOrUpdate(flowerToUpdate);
+    public void updateFlowerAmount(Integer flowerId, Integer newFlowerAmount) throws IncorrectArgument {
+        if (isValidFlowerId(flowerId)) {
+            Flower flowerToUpdate = flowerRepository.findById(flowerId);
+            flowerToUpdate.setAmount(newFlowerAmount);
+            flowerRepository.createOrUpdate(flowerToUpdate);
+            System.out.println("Flower was updated");
+        } else {
+            System.out.println("Incorrect flower Id");
+        }
     }
 
-    public void restoreFlowerAmount(OrderedEntry orderedEntry) {
+    public void restoreFlowerAmount(OrderedEntry orderedEntry) throws IncorrectArgument {
         Flower flowerToRestoreAmount = flowerRepository.findById(orderedEntry.getFlower().getId());
         flowerToRestoreAmount.setAmount(flowerToRestoreAmount.getAmount() + orderedEntry.getQuantity());
         flowerRepository.createOrUpdate(flowerToRestoreAmount);
@@ -57,10 +66,9 @@ public class FlowersServices {
                         && flower.getPrice().equals(newFlower.getPrice())).findFirst().orElse(null);
     }
 
-    public void reduceFlowerAmount(OrderedEntry orderedEntry) {
+    public void reduceFlowerAmount(OrderedEntry orderedEntry) throws IncorrectArgument {
         Flower flowerToReduceAmount = flowerRepository.findById(orderedEntry.getFlower().getId());
         flowerToReduceAmount.setAmount(flowerToReduceAmount.getAmount() - orderedEntry.getQuantity());
         flowerRepository.createOrUpdate(flowerToReduceAmount);
     }
-
 }

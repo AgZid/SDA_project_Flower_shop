@@ -7,9 +7,11 @@ import com.model.OrderedEntry;
 import com.repository.CustomerRepository;
 import com.repository.FlowerRepository;
 import com.repository.FlowersOrderRepository;
+import com.service.customExceptions.IncorrectArgument;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
 import java.util.List;
 
 @NoArgsConstructor
@@ -25,7 +27,7 @@ public class CustomersAndFlowersOrderingServices {
         customerRepository.findAll().forEach(System.out::println);
     }
 
-    public void addNewCustomer(Customer newCustomer) {
+    public void addNewCustomer(Customer newCustomer) throws IncorrectArgument {
         Customer customerInClientList = customerRepository.findByFullName(newCustomer.getFullName());
         if (customerInClientList == null) {
             customerRepository.createOrUpdate(newCustomer);
@@ -45,17 +47,20 @@ public class CustomersAndFlowersOrderingServices {
     public Customer findCustomerByName(String customerFullName) {
         Customer foundCustomerByName = customerRepository.findByFullName(customerFullName);
         if (foundCustomerByName == null) {
-            System.out.println("Customer was not found");
+            {throw new IncorrectArgument("No customer " + customerFullName + ". Incorrect name was entered.");}
         }
         return foundCustomerByName;
     }
 
-    public List<FlowersOrder> retrieveCustomerOrders(String customerFullName) {
+    public List<FlowersOrder> retrieveCustomerOrders(String customerFullName) throws IncorrectArgument {
         Customer customer = findCustomerByName(customerFullName);
+        if (customer == null) {
+            throw new IncorrectArgument("Value was not passed. Record was not saved.");
+        }
         return orderRepository.findByForeignKey("customer", customer.getId());
     }
 
-    public void showCustomerOrders(String customerFullName) {
+    public void showCustomerOrders(String customerFullName) throws IncorrectArgument {
         retrieveCustomerOrders(customerFullName).forEach(System.out::println);
     }
 
@@ -63,24 +68,38 @@ public class CustomersAndFlowersOrderingServices {
         return orderRepository.findById(orderId) != null;
     }
 
-    public void addNewOrder(String customerFullName, FlowersOrder newOrder) {
+    public void addNewOrder(String customerFullName, FlowersOrder newOrder) throws IncorrectArgument {
         Customer customer = findCustomerByName(customerFullName);
         newOrder.setCustomer(customer);
         List<OrderedEntry> orderedEntries = newOrder.getOrderedEntries();
         orderedEntries.forEach(orderedEntry -> orderedEntry.setFlowersOrder(newOrder));
-        customer.addOrder(newOrder);
+
+        if (customer.getOrders() == null) {
+            customer.setOrders(Arrays.asList(newOrder));
+        } else {
+            List<FlowersOrder> flowersOrders = customer.getOrders();
+            flowersOrders.add(newOrder);
+            customer.setOrders(flowersOrders);
+        }
+
         customerRepository.createOrUpdate(customer);
     }
 
-    public void cancelOrder(Integer orderId) {
+    public void cancelOrder(Integer orderId) throws IncorrectArgument {
         FlowersOrder flowersOrder = orderRepository.findById(orderId);
-        flowersOrder.getOrderedEntries().forEach(orderedEntry ->flowersServices.restoreFlowerAmount(orderedEntry));
+        flowersOrder.getOrderedEntries().forEach(orderedEntry -> {
+            try {
+                flowersServices.restoreFlowerAmount(orderedEntry);
+            } catch (IncorrectArgument e) {
+                e.printStackTrace();
+            }
+        });
 
         flowersOrder.setOrderStatus(OrderStatus.CANCELED);
         orderRepository.createOrUpdate(flowersOrder);
     }
 
-    public OrderedEntry createNewOrderEntry(Integer quantityOfFlowers, Integer flowerId) {
+    public OrderedEntry createNewOrderEntry(Integer quantityOfFlowers, Integer flowerId) throws IncorrectArgument {
         OrderedEntry newOrderEntity = OrderedEntry.builder()
                 .quantity(quantityOfFlowers)
                 .flower(flowerRepository.findById(flowerId))

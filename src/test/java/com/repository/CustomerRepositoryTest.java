@@ -1,6 +1,7 @@
 package com.repository;
 
 import com.model.Customer;
+import com.service.customExceptions.IncorrectArgument;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ class CustomerRepositoryTest {
     private static final CustomerRepository CUSTOMER_REPOSITORY = new CustomerRepository();
 
     @BeforeEach
-    public void SetUpFlowers() {
+    public void SetUpFlowers() throws IncorrectArgument {
 
         Customer johnTest = Customer.builder()
                 .fullName("John Test")
@@ -36,7 +37,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void createAndUpdate_update() {
+    void createAndUpdate_update() throws IncorrectArgument {
         Customer testCustomer = CUSTOMER_REPOSITORY.findByFullName("Tom Test");
         testCustomer.setEmail("New email address");
 
@@ -47,7 +48,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void createAndUpdate_create() {
+    void createAndUpdate_create() throws IncorrectArgument {
         Customer testTest = Customer.builder()
                 .fullName("Test Test")
                 .phoneNumber("TestPhone")

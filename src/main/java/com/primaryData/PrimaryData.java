@@ -8,11 +8,10 @@ import com.model.OrderedEntry;
 import com.model.FlowersOrder;
 import com.repository.CustomerRepository;
 import com.repository.FlowerRepository;
-import com.repository.FlowersOrderRepository;
+import com.service.customExceptions.IncorrectArgument;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,11 +19,10 @@ import static com.primaryData.FromFileToObject.extractFromJsonFile;
 
 public class PrimaryData {
 
-    public void loadPrimaryData() {
+    public void loadPrimaryData() throws IncorrectArgument {
 
         com.repository.FlowerRepository flowerRepository = new FlowerRepository();
         com.repository.CustomerRepository customerRepository = new CustomerRepository();
-        com.repository.FlowersOrderRepository flowersOrderRepository = new FlowersOrderRepository();
 
         List<Flower> flowers = extractFromJsonFile("src/main/resources/flowers.json", new TypeToken<>(){});
 
