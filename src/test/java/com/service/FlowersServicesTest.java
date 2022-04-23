@@ -89,7 +89,7 @@ class FlowersServicesTest {
     }
 
     @Test
-    void removeFlower() {
+    void testRemoveFlower() {
         Integer flowerId = FLOWER_REPOSITORY.findByName("TestTulpe").getId();
 
         flowersServices.removeFlower(flowerId);
@@ -98,18 +98,36 @@ class FlowersServicesTest {
     }
 
     @Test
-    void updateFlowerAmount() {
+    void testUpdateFlowerAmount() {
+        Integer flowerId = FLOWER_REPOSITORY.findByName("TestTulpe").getId();
+        Integer newFlowerAmount = 55;
+
+        flowersServices.updateFlowerAmount(flowerId, newFlowerAmount);
+
+        assertThat(FLOWER_REPOSITORY.findById(flowerId).getAmount()).isEqualTo(newFlowerAmount);
     }
 
     @Test
-    void restoreFlowerAmount() {
+    void testFindFlowerInStock_valid() {
+        Flower gvazdikas = Flower.builder()
+                .name("TestGvazdikas")
+                .price(2.0)
+                .color("TestColor")
+                .amount(20)
+                .build();
+
+        assertThat(flowersServices.findFlowerInStock(gvazdikas).getName()).isEqualTo("TestGvazdikas");
     }
 
     @Test
-    void findFlowerInStock() {
-    }
+    void testFindFlowerInStock_invalid() {
+        Flower jurginas = Flower.builder()
+                .name("TestJurginas")
+                .price(2.0)
+                .color("TestColor")
+                .amount(50)
+                .build();
 
-    @Test
-    void reduceFlowerAmount() {
+        assertThat(flowersServices.findFlowerInStock(jurginas)).isNull();
     }
 }

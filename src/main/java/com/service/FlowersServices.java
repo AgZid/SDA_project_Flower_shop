@@ -59,11 +59,11 @@ public class FlowersServices {
         flowerRepository.createOrUpdate(flowerToRestoreAmount);
     }
 
-    public Flower findFlowerInStock(Flower newFlower) {
+    public Flower findFlowerInStock(Flower checkedFlower) {
         return flowerRepository.findAll().stream()
-                .filter(flower -> flower.getName().equalsIgnoreCase(newFlower.getName())
-                        && flower.getColor().equalsIgnoreCase(newFlower.getColor())
-                        && flower.getPrice().equals(newFlower.getPrice())).findFirst().orElse(null);
+                .filter(flower -> flower.getName().equalsIgnoreCase(checkedFlower.getName())
+                        && flower.getColor().equalsIgnoreCase(checkedFlower.getColor())
+                        && flower.getPrice().equals(checkedFlower.getPrice())).findFirst().orElse(null);
     }
 
     public void reduceFlowerAmount(OrderedEntry orderedEntry) throws IncorrectArgument {
